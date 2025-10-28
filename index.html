@@ -1,921 +1,339 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MagicStory.az - Uşağınızın Xəyal Dünyası</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #FFA500 0%, #FFB900 25%, #FFC900 50%, #FFD700 75%, #FFE100 100%);
-            color: #1a1a2e;
-            overflow-x: hidden;
-            width: 100%;
-            margin: 0 auto;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        @media (min-width: 481px) {
-            body {
-                max-width: 480px;
-            }
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(255, 201, 0, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 155, 0, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(255, 225, 0, 0.2) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .container {
-            width: 100%;
-            min-height: 100vh;
-            position: relative;
-            z-index: 1;
-        }
-
-        section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 5%;
-            position: relative;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease-out;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 375px) {
-            section {
-                padding: 30px 4%;
-                min-height: auto;
-                padding-top: 60px;
-                padding-bottom: 60px;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            section {
-                padding: 35px 4.5%;
-            }
-        }
-
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hero {
-            background: transparent;
-            text-align: center;
-            padding: 60px 5%;
-            width: 100%;
-        }
-
-        @media (max-width: 375px) {
-            .hero {
-                padding: 50px 4%;
-            }
-        }
-
-        .hero-logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .hero h1 {
-            font-size: 2.8em;
-            font-weight: 900;
-            color: #1a1a2e;
-            margin-bottom: 15px;
-            text-shadow: 3px 3px 6px rgba(255, 155, 0, 0.3);
-            animation: fadeInDown 1s ease-out;
-            word-wrap: break-word;
-        }
-
-        @media (max-width: 375px) {
-            .hero h1 {
-                font-size: 2.2em;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .hero h1 {
-                font-size: 2.5em;
-            }
-        }
-
-        @media (min-width: 415px) {
-            .hero h1 {
-                font-size: 2.8em;
-            }
-        }
-
-        .hero p {
-            font-size: 1.3em;
-            color: #2a2a3e;
-            font-weight: 600;
-            animation: fadeInUp 1s ease-out 0.3s both;
-            text-shadow: 1px 1px 2px rgba(255, 201, 0, 0.2);
-        }
-
-        @media (max-width: 375px) {
-            .hero p {
-                font-size: 1.1em;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .hero p {
-                font-size: 1.2em;
-            }
-        }
-
-        .step {
-            width: 100%;
-            max-width: 95%;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 40px 5%;
-            box-shadow: 0 8px 32px rgba(255, 155, 0, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-sizing: border-box;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 375px) {
-            .step {
-                padding: 30px 4%;
-                border-radius: 25px;
-                max-width: 92%;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .step {
-                padding: 35px 4.5%;
-                max-width: 94%;
-            }
-        }
-
-        .step-number {
-            display: inline-block;
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #FF9B00, #FFC900);
-            border-radius: 50%;
-            line-height: 70px;
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(255, 155, 0, 0.5);
-            animation: pulse 2s infinite;
-            color: #fff;
-            border: 4px solid rgba(255, 255, 255, 0.4);
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 10px 30px rgba(255, 155, 0, 0.5);
-            }
-            50% {
-                transform: scale(1.08);
-                box-shadow: 0 15px 40px rgba(255, 155, 0, 0.7);
-            }
-        }
-
-        .step h2 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: #1a1a2e;
-            font-weight: 800;
-            text-shadow: 2px 2px 4px rgba(255, 201, 0, 0.2);
-            word-wrap: break-word;
-        }
-
-        @media (max-width: 375px) {
-            .step h2 {
-                font-size: 1.6em;
-                margin-bottom: 15px;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .step h2 {
-                font-size: 1.8em;
-            }
-        }
-
-        .step-description {
-            font-size: 1.05em;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            color: #2a2a3e;
-            font-weight: 500;
-            word-wrap: break-word;
-        }
-
-        @media (max-width: 375px) {
-            .step-description {
-                font-size: 0.95em;
-                margin-bottom: 20px;
-                line-height: 1.5;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .step-description {
-                font-size: 1em;
-                margin-bottom: 25px;
-            }
-        }
-
-        .image-placeholder {
-            width: 100%;
-            max-width: 95%;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px auto;
-            border: 3px solid rgba(255, 255, 255, 0.5);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 15px 45px rgba(255, 155, 0, 0.3);
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 375px) {
-            .image-placeholder {
-                height: 250px;
-                max-width: 100%;
-                border-radius: 20px;
-                margin: 15px auto;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .image-placeholder {
-                height: 280px;
-                max-width: 98%;
-            }
-        }
-
-        @media (min-width: 415px) {
-            .image-placeholder {
-                max-width: 350px;
-            }
-        }
-
-        .image-placeholder img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 22px;
-        }
-
-        .image-placeholder::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 3s infinite;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%) translateY(-100%) rotate(45deg);
-            }
-            100% {
-                transform: translateX(100%) translateY(100%) rotate(45deg);
-            }
-        }
-
-        .icon-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin: 30px auto;
-            width: 100%;
-            max-width: 95%;
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 375px) {
-            .icon-grid {
-                gap: 10px;
-                margin: 20px auto;
-                max-width: 100%;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .icon-grid {
-                gap: 11px;
-                margin: 25px auto;
-                max-width: 98%;
-            }
-        }
-
-        @media (min-width: 415px) {
-            .icon-grid {
-                max-width: 350px;
-            }
-        }
-
-        .icon-item {
-            background: rgba(255, 255, 255, 0.35);
-            padding: 18px 10px;
-            border-radius: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(5px);
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 375px) {
-            .icon-item {
-                padding: 15px 8px;
-                border-radius: 15px;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .icon-item {
-                padding: 16px 9px;
-                border-radius: 18px;
-            }
-        }
-
-        .icon-item:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(255, 155, 0, 0.4);
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .icon-item p {
-            font-size: 0.9em;
-            color: #1a1a2e;
-            font-weight: 600;
-            margin-top: 8px;
-            word-wrap: break-word;
-        }
-
-        @media (max-width: 375px) {
-            .icon-item p {
-                font-size: 0.8em;
-                margin-top: 6px;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .icon-item p {
-                font-size: 0.85em;
-                margin-top: 7px;
-            }
-        }
-
-        .price-section {
-            background: transparent;
-            padding: 60px 5%;
-            text-align: center;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 375px) {
-            .price-section {
-                padding: 50px 4%;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .price-section {
-                padding: 55px 4.5%;
-            }
-        }
-
-        .price-box {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 30px;
-            padding: 50px 8%;
-            max-width: 95%;
-            margin: 0 auto;
-            box-shadow: 0 20px 60px rgba(255, 155, 0, 0.4);
-            transform: scale(0.9);
-            animation: scaleIn 0.8s ease-out forwards;
-            border: 3px solid rgba(255, 201, 0, 0.3);
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 375px) {
-            .price-box {
-                padding: 35px 6%;
-                border-radius: 25px;
-                max-width: 92%;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .price-box {
-                padding: 42px 7%;
-                border-radius: 28px;
-                max-width: 94%;
-            }
-        }
-
-        @media (min-width: 415px) {
-            .price-box {
-                max-width: 350px;
-                padding: 50px 35px;
-            }
-        }
-
-        @keyframes scaleIn {
-            to {
-                transform: scale(1);
-            }
-        }
-
-        .price-box h2 {
-            color: #1a1a2e;
-            font-size: 2.3em;
-            margin-bottom: 20px;
-            font-weight: 800;
-            word-wrap: break-word;
-        }
-
-        @media (max-width: 375px) {
-            .price-box h2 {
-                font-size: 1.8em;
-                margin-bottom: 15px;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .price-box h2 {
-                font-size: 2em;
-                margin-bottom: 18px;
-            }
-        }
-
-        .price {
-            font-size: 4.5em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #FF9B00, #FFC900);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        @media (max-width: 375px) {
-            .price {
-                font-size: 3.5em;
-                margin: 15px 0;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .price {
-                font-size: 4em;
-                margin: 18px 0;
-            }
-        }
-
-        .price span {
-            font-size: 0.5em;
-            color: #16213e;
-        }
-
-        .features-list {
-            text-align: left;
-            margin: 30px 0;
-            color: #16213e;
-        }
-
-        .features-list li {
-            padding: 12px 0;
-            font-size: 1.05em;
-            list-style: none;
-            position: relative;
-            padding-left: 35px;
-            font-weight: 500;
-            word-wrap: break-word;
-        }
-
-        @media (max-width: 375px) {
-            .features-list li {
-                padding: 10px 0;
-                font-size: 0.95em;
-                padding-left: 30px;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .features-list li {
-                padding: 11px 0;
-                font-size: 1em;
-                padding-left: 32px;
-            }
-        }
-
-        .features-list li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #FF9B00;
-            font-weight: bold;
-            font-size: 1.4em;
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, #FF9B00, #FFC900);
-            color: #fff;
-            border: none;
-            padding: 20px 55px;
-            font-size: 1.25em;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            margin-top: 25px;
-            box-shadow: 0 12px 35px rgba(255, 155, 0, 0.5);
-            transition: all 0.3s ease;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-            width: auto;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 375px) {
-            .cta-button {
-                padding: 16px 40px;
-                font-size: 1.1em;
-                margin-top: 20px;
-            }
-        }
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .cta-button {
-                padding: 18px 48px;
-                font-size: 1.18em;
-                margin-top: 22px;
-            }
-        }
-
-        .cta-button:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 18px 45px rgba(255, 155, 0, 0.7);
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .floating-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .shape {
-            position: absolute;
-            opacity: 0.15;
-            animation: floatShape 25s infinite ease-in-out;
-        }
-
-        .shape:nth-child(1) {
-            top: 15%;
-            left: 10%;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(255, 225, 0, 0.6), transparent);
-            border-radius: 50%;
-            animation-delay: 0s;
-        }
-
-        .shape:nth-child(2) {
-            top: 50%;
-            right: 8%;
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, rgba(255, 201, 0, 0.6), transparent);
-            border-radius: 50%;
-            animation-delay: 7s;
-        }
-
-        .shape:nth-child(3) {
-            bottom: 25%;
-            left: 15%;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(255, 155, 0, 0.6), transparent);
-            border-radius: 50%;
-            animation-delay: 14s;
-        }
-
-        @keyframes floatShape {
-            0%, 100% {
-                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
-            }
-            33% {
-                transform: translateY(-40px) translateX(25px) rotate(120deg) scale(1.1);
-            }
-            66% {
-                transform: translateY(40px) translateX(-25px) rotate(240deg) scale(0.9);
-            }
-        }
-
-        .process-line {
-            width: 5px;
-            height: 100px;
-            background: linear-gradient(180deg, rgba(255, 225, 0, 0.8), rgba(255, 155, 0, 0.8));
-            margin: 30px auto;
-            border-radius: 3px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(255, 155, 0, 0.3);
-        }
-
-        .process-line::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 40%;
-            background: rgba(255, 255, 255, 0.6);
-            animation: lineFlow 2.5s infinite;
-        }
-
-        @keyframes lineFlow {
-            0% {
-                top: -40%;
-            }
-            100% {
-                top: 140%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MagicStory.az - Uşağınızın Xəyal Dünyası</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #FFA500 0%, #FFB900 25%, #FFC900 50%, #FFD700 75%, #FFE100 100%);
+      color: #1a1a2e;
+      overflow-x: hidden;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 481px) { body { max-width: 480px; } }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255, 201, 0, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 155, 0, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 225, 0, 0.2) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .container { width: 100%; min-height: 100vh; position: relative; z-index: 1; }
+
+    section {
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 40px 5%; position: relative; opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out;
+      width: 100%; box-sizing: border-box;
+    }
+    @media (max-width: 375px) {
+      section { padding: 30px 4%; min-height: auto; padding-top: 60px; padding-bottom: 60px; }
+    }
+    @media (min-width: 376px) and (max-width: 414px) { section { padding: 35px 4.5%; } }
+    section.visible { opacity: 1; transform: translateY(0); }
+
+    .hero { background: transparent; text-align: center; padding: 60px 5%; width: 100%; }
+    @media (max-width: 375px) { .hero { padding: 50px 4%; } }
+
+    .hero-logo { width: 80px; height: 80px; margin: 0 auto 20px; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+    .hero h1 { font-size: 2.8em; font-weight: 900; color: #1a1a2e; margin-bottom: 15px; text-shadow: 3px 3px 6px rgba(255, 155, 0, 0.3); animation: fadeInDown 1s ease-out; word-wrap: break-word; }
+    @media (max-width: 375px) { .hero h1 { font-size: 2.2em; } }
+    @media (min-width: 376px) and (max-width: 414px) { .hero h1 { font-size: 2.5em; } }
+    @media (min-width: 415px) { .hero h1 { font-size: 2.8em; } }
+
+    .hero p { font-size: 1.3em; color: #2a2a3e; font-weight: 600; animation: fadeInUp 1s ease-out 0.3s both; text-shadow: 1px 1px 2px rgba(255, 201, 0, 0.2); }
+    @media (max-width: 375px) { .hero p { font-size: 1.1em; } }
+    @media (min-width: 376px) and (max-width: 414px) { .hero p { font-size: 1.2em; } }
+
+    .step {
+      width: 100%; max-width: 95%; text-align: center; background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
+      border-radius: 30px; padding: 40px 5%; box-shadow: 0 8px 32px rgba(255,155,0,0.2); border: 2px solid rgba(255,255,255,0.3);
+      box-sizing: border-box; margin: 0 auto;
+    }
+    @media (max-width: 375px) { .step { padding: 30px 4%; border-radius: 25px; max-width: 92%; } }
+    @media (min-width: 376px) and (max-width: 414px) { .step { padding: 35px 4.5%; max-width: 94%; } }
+
+    .step-number {
+      display: inline-block; width: 70px; height: 70px; background: linear-gradient(135deg, #FF9B00, #FFC900);
+      border-radius: 50%; line-height: 70px; font-size: 2em; font-weight: bold; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(255,155,0,0.5);
+      animation: pulse 2s infinite; color: #fff; border: 4px solid rgba(255,255,255,0.4);
+    }
+    @keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 10px 30px rgba(255,155,0,.5)} 50%{transform:scale(1.08);box-shadow:0 15px 40px rgba(255,155,0,.7)} }
+
+    .step h2 { font-size: 2em; margin-bottom: 20px; color: #1a1a2e; font-weight: 800; text-shadow: 2px 2px 4px rgba(255,201,0,0.2); word-wrap: break-word; }
+    @media (max-width: 375px) { .step h2 { font-size: 1.6em; margin-bottom: 15px; } }
+    @media (min-width: 376px) and (max-width: 414px) { .step h2 { font-size: 1.8em; } }
+
+    .step-description { font-size: 1.05em; line-height: 1.6; margin-bottom: 30px; color: #2a2a3e; font-weight: 500; word-wrap: break-word; }
+    @media (max-width: 375px) { .step-description { font-size: .95em; margin-bottom: 20px; line-height: 1.5; } }
+    @media (min-width: 376px) and (max-width: 414px) { .step-description { font-size: 1em; margin-bottom: 25px; } }
+
+    .image-placeholder {
+      width: 100%; max-width: 95%; height: 300px; background: rgba(255,255,255,0.4); border-radius: 25px; display: flex; align-items: center; justify-content: center; margin: 20px auto; border: 3px solid rgba(255,255,255,0.5); position: relative; overflow: hidden; box-shadow: 0 15px 45px rgba(255,155,0,0.3); box-sizing: border-box;
+    }
+    @media (max-width: 375px) { .image-placeholder { height: 250px; max-width: 100%; border-radius: 20px; margin: 15px auto; } }
+    @media (min-width: 376px) and (max-width: 414px) { .image-placeholder { height: 280px; max-width: 98%; } }
+    @media (min-width: 415px) { .image-placeholder { max-width: 350px; } }
+
+    .image-placeholder img { width: 100%; height: 100%; object-fit: cover; border-radius: 22px; }
+    .image-placeholder::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 3s infinite; pointer-events: none; z-index: 1; }
+    @keyframes shimmer { 0%{ transform: translate(-100%,-100%) rotate(45deg);} 100%{ transform: translate(100%,100%) rotate(45deg);} }
+
+    .icon-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 30px auto; width: 100%; max-width: 95%; box-sizing: border-box; }
+    @media (max-width: 375px) { .icon-grid { gap: 10px; margin: 20px auto; max-width: 100%; } }
+    @media (min-width: 376px) and (max-width: 414px) { .icon-grid { gap: 11px; margin: 25px auto; max-width: 98%; } }
+    @media (min-width: 415px) { .icon-grid { max-width: 350px; } }
+
+    .icon-item { background: rgba(255,255,255,0.35); padding: 18px 10px; border-radius: 20px; text-align: center; transition: all .3s ease; border: 2px solid rgba(255,255,255,0.4); backdrop-filter: blur(5px); box-sizing: border-box; }
+    @media (max-width: 375px) { .icon-item { padding: 15px 8px; border-radius: 15px; } }
+    @media (min-width: 376px) and (max-width: 414px) { .icon-item { padding: 16px 9px; border-radius: 18px; } }
+    .icon-item:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 15px 35px rgba(255,155,0,0.4); background: rgba(255,255,255,0.5); }
+    .icon-item p { font-size: .9em; color: #1a1a2e; font-weight: 600; margin-top: 8px; word-wrap: break-word; }
+    @media (max-width: 375px) { .icon-item p { font-size: .8em; margin-top: 6px; } }
+    @media (min-width: 376px) and (max-width: 414px) { .icon-item p { font-size: .85em; margin-top: 7px; } }
+
+    .price-section { background: transparent; padding: 60px 5%; text-align: center; width: 100%; box-sizing: border-box; }
+    @media (max-width: 375px) { .price-section { padding: 50px 4%; } }
+    @media (min-width: 376px) and (max-width: 414px) { .price-section { padding: 55px 4.5%; } }
+
+    /* === Yeni: Çoxpaketli qutu grid'i === */
+    .price-grid { display: grid; grid-template-columns: 1fr; gap: 18px; width: 100%; max-width: 520px; margin: 0 auto; }
+    @media (min-width: 415px) { .price-grid { max-width: 350px; } }
+
+    .price-box { background: rgba(255,255,255,0.95); border-radius: 30px; padding: 26px 22px; box-shadow: 0 20px 60px rgba(255,155,0,0.4); border: 3px solid rgba(255,201,0,0.3); transform: scale(0.98); animation: scaleIn .6s ease-out forwards; position: relative; }
+    @keyframes scaleIn { to { transform: scale(1); } }
+
+    .price-box.active { outline: 3px solid #ffb703; box-shadow: 0 24px 70px rgba(255,155,0,0.55); }
+    .badge { position: absolute; top: -12px; right: 16px; background: linear-gradient(135deg,#FF9B00,#FFC900); color:#fff; font-weight:800; font-size:.8rem; padding:6px 12px; border-radius: 999px; box-shadow: 0 10px 24px rgba(255,155,0,.45); }
+
+    .price-box h3 { color: #1a1a2e; font-size: 1.4em; font-weight: 900; letter-spacing:.3px; margin-bottom: 8px; }
+    .subtitle { font-size: .95em; color: #2a2a3e; opacity: .9; margin-bottom: 10px; font-weight: 600; }
+
+    .price { font-size: 3em; font-weight: 900; background: linear-gradient(135deg, #FF9B00, #FFC900); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 8px 0 14px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+    .price span { font-size: .5em; color: #16213e; -webkit-text-fill-color: initial; background: none; }
+
+    .features-list { text-align: left; margin: 14px 0 8px; color: #16213e; }
+    .features-list li { padding: 10px 0; font-size: 1.02em; list-style: none; position: relative; padding-left: 32px; font-weight: 500; }
+    .features-list li::before { content: "✓"; position: absolute; left: 0; color: #FF9B00; font-weight: bold; font-size: 1.3em; }
+
+    .cta-button { background: linear-gradient(135deg, #FF9B00, #FFC900); color: #fff; border: none; padding: 16px 22px; font-size: 1.05em; font-weight: bold; border-radius: 50px; cursor: pointer; margin-top: 14px; box-shadow: 0 12px 35px rgba(255,155,0,0.5); transition: all .3s ease; text-shadow: 1px 1px 2px rgba(0,0,0,.2); width: 100%; }
+    .cta-button:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 18px 45px rgba(255,155,0,0.7); }
+
+    .process-line { width: 5px; height: 100px; background: linear-gradient(180deg, rgba(255, 225, 0, 0.8), rgba(255, 155, 0, 0.8)); margin: 30px auto; border-radius: 3px; position: relative; overflow: hidden; box-shadow: 0 5px 15px rgba(255, 155, 0, 0.3); }
+    .process-line::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 40%; background: rgba(255, 255, 255, 0.6); animation: lineFlow 2.5s infinite; }
+    @keyframes lineFlow { 0% { top: -40%; } 100% { top: 140%; } }
+
+    .floating-shapes { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .shape { position: absolute; opacity: .15; animation: floatShape 25s infinite ease-in-out; }
+    .shape:nth-child(1){ top:15%; left:10%; width:100px; height:100px; background: radial-gradient(circle, rgba(255,225,0,.6), transparent); border-radius:50%; animation-delay:0s; }
+    .shape:nth-child(2){ top:50%; right:8%; width:80px; height:80px; background: radial-gradient(circle, rgba(255,201,0,.6), transparent); border-radius:50%; animation-delay:7s; }
+    .shape:nth-child(3){ bottom:25%; left:15%; width:120px; height:120px; background: radial-gradient(circle, rgba(255,155,0,.6), transparent); border-radius:50%; animation-delay:14s; }
+    @keyframes floatShape { 0%,100%{transform: translate(0,0) rotate(0) scale(1)} 33%{transform: translate(25px,-40px) rotate(120deg) scale(1.1)} 66%{transform: translate(-25px,40px) rotate(240deg) scale(.9)} }
+
+    /* Kiçik info sətiri */
+    .note { font-size: .9em; color: #2a2a3e; opacity: .85; margin-top: 8px; }
+  </style>
 </head>
 <body>
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
 
-    <div class="container">
-        <!-- Hero Section -->
-        <section class="hero visible">
-            <div class="hero-logo">🎨</div>
-            <h1>MagicStory.az</h1>
-            <p>Uşağınızın Xəyalı Gerçək Olur!</p>
-        </section>
+  <div class="container">
+    <!-- Hero Section -->
+    <section class="hero visible">
+      <div class="hero-logo">🎨</div>
+      <h1>MagicStory.az</h1>
+      <p>Uşağınızın Xəyalı Gerçək Olur!</p>
+    </section>
 
-        <!-- Step 1: Story Creation -->
-        <section class="step" id="step1">
-            <div class="step-number">1</div>
-            <h2>🖊️ Hekayənin Yaradılması</h2>
-            <p class="step-description">Uşağınızın xəyalındaki personajları, sevimli heyvanları və gələcək arzularını öyrənirik. Hər bir hekayə unikal və xüsusidir!</p>
-            <div class="image-placeholder">
-                <img src="images/step1.png" alt="Hekayə yaradılması">
-            </div>
-            <div class="icon-grid">
-                <div class="icon-item">
-                    <div style="font-size: 2em;">🎭</div>
-                    <p>Personaj</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">🦄</div>
-                    <p>Heyvanlar</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">✨</div>
-                    <p>Xəyal</p>
-                </div>
-            </div>
-        </section>
+    <!-- Step 1: Story Creation -->
+    <section class="step" id="step1">
+      <div class="step-number">1</div>
+      <h2>🖊️ Hekayənin Yaradılması</h2>
+      <p class="step-description">Uşağınızın xəyalındaki personajları, sevimli heyvanları və gələcək arzularını öyrənirik. Hər bir hekayə unikal və xüsusidir!</p>
+      <div class="image-placeholder">
+        <img src="images/step1.png" alt="Hekayə yaradılması" />
+      </div>
+      <div class="icon-grid">
+        <div class="icon-item"><div style="font-size:2em;">🎭</div><p>Personaj</p></div>
+        <div class="icon-item"><div style="font-size:2em;">🦄</div><p>Heyvanlar</p></div>
+        <div class="icon-item"><div style="font-size:2em;">✨</div><p>Xəyal</p></div>
+      </div>
+    </section>
 
-        <div class="process-line"></div>
+    <div class="process-line"></div>
 
-        <!-- Step 2: Page Design -->
-        <section class="step" id="step2">
-            <div class="step-number">2</div>
-            <h2>📖 Səhifələrin Dizaynı</h2>
-            <p class="step-description">Hekayəyə və personajlara uyğun olaraq kitabın hər bir səhifəsi profesional şəkildə dizayn edilir.</p>
-            <div class="image-placeholder">
-                <img src="images/step2.png" alt="Səhifələrin dizaynı">
-            </div>
-            <div class="icon-grid">
-                <div class="icon-item">
-                    <div style="font-size: 2em;">🎨</div>
-                    <p>Rənglər</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">🖼️</div>
-                    <p>İllüstrasiya</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">📝</div>
-                    <p>Mətn</p>
-                </div>
-            </div>
-        </section>
+    <!-- Step 2: Page Design -->
+    <section class="step" id="step2">
+      <div class="step-number">2</div>
+      <h2>📖 Səhifələrin Dizaynı</h2>
+      <p class="step-description">Hekayəyə və personajlara uyğun olaraq kitabın hər bir səhifəsi profesional şəkildə dizayn edilir.</p>
+      <div class="image-placeholder">
+        <img src="images/step2.png" alt="Səhifələrin dizaynı" />
+      </div>
+      <div class="icon-grid">
+        <div class="icon-item"><div style="font-size:2em;">🎨</div><p>Rənglər</p></div>
+        <div class="icon-item"><div style="font-size:2em;">🖼️</div><p>İllüstrasiya</p></div>
+        <div class="icon-item"><div style="font-size:2em;">📝</div><p>Mətn</p></div>
+      </div>
+    </section>
 
-        <div class="process-line"></div>
+    <div class="process-line"></div>
 
-        <!-- Step 3: Book Printing -->
-        <section class="step" id="step3">
-            <div class="step-number">3</div>
-            <h2>🖨️ Kitabın Çapı</h2>
-            <p class="step-description">Yüksək keyfiyyətli çap texnologiyası ilə kitabınız hazırlanır. Hər bir detalda mükəmməllik!</p>
-            <div class="image-placeholder">
-                <img src="images/step3.png" alt="Kitabın çapı">
-            </div>
-            <div class="icon-grid">
-                <div class="icon-item">
-                    <div style="font-size: 2em;">📄</div>
-                    <p>Keyfiyyətli kağız</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">🌈</div>
-                    <p>Parlaq rənglər</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">📚</div>
-                    <p>Möhkəm cild</p>
-                </div>
-            </div>
-        </section>
+    <!-- Step 3: Book Printing -->
+    <section class="step" id="step3">
+      <div class="step-number">3</div>
+      <h2>🖨️ Kitabın Çapı</h2>
+      <p class="step-description">Yüksək keyfiyyətli çap texnologiyası ilə kitabınız hazırlanır. Hər bir detalda mükəmməllik!</p>
+      <div class="image-placeholder">
+        <img src="images/step3.png" alt="Kitabın çapı" />
+      </div>
+      <div class="icon-grid">
+        <div class="icon-item"><div style="font-size:2em;">📄</div><p>Keyfiyyətli kağız</p></div>
+        <div class="icon-item"><div style="font-size:2em;">🌈</div><p>Parlaq rənglər</p></div>
+        <div class="icon-item"><div style="font-size:2em;">📚</div><p>Möhkəm cild</p></div>
+      </div>
+    </section>
 
-        <div class="process-line"></div>
+    <div class="process-line"></div>
 
-        <!-- Step 4: 3D Keychain Creation -->
-        <section class="step" id="step4">
-            <div class="step-number">4</div>
-            <h2>🎁 Sehrli Hədiyyələr</h2>
-            <p class="step-description">Brelok, Corab və fərqli sehrli hədiyyələr</p>
-            <div class="image-placeholder">
-                <img src="images/step4.png" alt="3D brelokların hazırlanması">
-            </div>
-            <div class="icon-grid">
-                <div class="icon-item">
-                    <div style="font-size: 2em;">🖨️</div>
-                    <p>3D Çap</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">🎨</div>
-                    <p>Rənglənmə</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">✨</div>
-                    <p>Hazır</p>
-                </div>
-            </div>
-        </section>
+    <!-- Step 4: Magic Gifts -->
+    <section class="step" id="step4">
+      <div class="step-number">4</div>
+      <h2>🎁 Sehrli Hədiyyələr</h2>
+      <p class="step-description">Brelok, Corab və fərqli sehrli hədiyyələr</p>
+      <div class="image-placeholder">
+        <img src="images/step4.png" alt="Sehrli hədiyyələr" />
+      </div>
+      <div class="icon-grid">
+        <div class="icon-item"><div style="font-size:2em;">🖨️</div><p>3D Çap</p></div>
+        <div class="icon-item"><div style="font-size:2em;">🎨</div><p>Rənglənmə</p></div>
+        <div class="icon-item"><div style="font-size:2em;">✨</div><p>Hazır</p></div>
+      </div>
+    </section>
 
-        <div class="process-line"></div>
+    <div class="process-line"></div>
 
-        <!-- Step 5: Packaging -->
-        <section class="step" id="step5">
-            <div class="step-number">5</div>
-            <h2>📦 Paketləmə</h2>
-            <p class="step-description">Kitab və breloklar xüsusi qutuda gözəl şəkildə paketlənir və təhvil verilməyə hazır olur!</p>
-            <div class="image-placeholder">
-                <img src="images/step5.png" alt="Paketləmə">
-            </div>
-            <div class="icon-grid">
-                <div class="icon-item">
-                    <div style="font-size: 2em;">🎀</div>
-                    <p>Dizayn qutu</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">💝</div>
-                    <p>Hədiyyə paketi</p>
-                </div>
-                <div class="icon-item">
-                    <div style="font-size: 2em;">✅</div>
-                    <p>Təhvil hazır</p>
-                </div>
-            </div>
-        </section>
+    <!-- Step 5: Packaging -->
+    <section class="step" id="step5">
+      <div class="step-number">5</div>
+      <h2>📦 Paketləmə</h2>
+      <p class="step-description">Kitab və breloklar xüsusi qutuda gözəl şəkildə paketlənir və təhvil verilməyə hazır olur!</p>
+      <div class="image-placeholder">
+        <img src="images/step5.png" alt="Paketləmə" />
+      </div>
+      <div class="icon-grid">
+        <div class="icon-item"><div style="font-size:2em;">🎀</div><p>Dizayn qutu</p></div>
+        <div class="icon-item"><div style="font-size:2em;">💝</div><p>Hədiyyə paketi</p></div>
+        <div class="icon-item"><div style="font-size:2em;">✅</div><p>Təhvil hazır</p></div>
+      </div>
+    </section>
 
-        <!-- Price Section -->
-        <section class="price-section">
-            <div class="price-box">
-                <h2>Tam Paket</h2>
-                <ul class="features-list">
-                    <li>Unikal fərdi hekayə</li>
-                    <li>Rəngli çap kitab</li>
-                    <li>Sehrli hədiyyələr</li>
-                    <li>Xüsusi dizayn qutusu</li>
-                    <li>Uşağınızın şəkli ilə</li>
-                </ul>
-                <div class="price">30 <span>AZN</span></div>
-                <button class="cta-button" onclick="alert('Sifariş üçün: magicstory.az')">✨ Sifariş Et</button>
-            </div>
-        </section>
-    </div>
+    <!-- === Yeni: Qiymətlər Bölməsi (3 paket) === -->
+    <section class="price-section" id="pricing">
+      <div class="price-grid">
+        <!-- Paket 1: Tək Kitab -->
+        <div class="price-box" data-package="Tək Kitab" data-price="30">
+          <h3>📘 Tək Kitab</h3>
+          <div class="subtitle">Fərdi hekayə + rəngli çap</div>
+          <div class="price">30 <span>AZN</span></div>
+          <ul class="features-list">
+            <li>Unikal fərdi hekayə</li>
+            <li>Rəngli çap kitab</li>
+            <li>Uşağınızın şəkli ilə</li>
+          </ul>
+          <button class="cta-button">✨ Sifariş Et</button>
+        </div>
 
-    <script>
-        // Scroll animation
-        const observerOptions = {
-            threshold: 0.2,
-            rootMargin: '0px 0px -100px 0px'
-        };
+        <!-- Paket 2: Kitab + Hədiyyə -->
+        <div class="price-box active" data-package="Kitab + Hədiyyə" data-price="35">
+          <div class="badge">Ən çox seçilən</div>
+          <h3>🎁 Kitab + Hədiyyə</h3>
+          <div class="subtitle">Kitab + sehrli hədiyyə</div>
+          <div class="price">35 <span>AZN</span></div>
+          <ul class="features-list">
+            <li>Unikal fərdi hekayə</li>
+            <li>Rəngli çap kitab</li>
+            <li>Bir ədəd sehrli hədiyyə</li>
+            <li>Uşağınızın şəkli ilə</li>
+          </ul>
+          <button class="cta-button">✨ Sifariş Et</button>
+        </div>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
+        <!-- Paket 3: Full Paket -->
+        <div class="price-box" data-package="Kitab + Hədiyyə + Bağlama" data-price="40">
+          <h3>📦 Kitab + Hədiyyə + Bağlama</h3>
+          <div class="subtitle">Tam hədiyyəlik set</div>
+          <div class="price">40 <span>AZN</span></div>
+          <ul class="features-list">
+            <li>Unikal fərdi hekayə</li>
+            <li>Rəngli çap kitab</li>
+            <li>Sehrli hədiyyələr</li>
+            <li>Xüsusi dizayn qutusu (bağlama)</li>
+            <li>Uşağınızın şəkli ilə</li>
+          </ul>
+          <button class="cta-button">✨ Sifariş Et</button>
+        </div>
+      </div>
+      <p class="note">Qiymətlər AZN ilə göstərilib. Sifarişi təsdiqlədikdən sonra operativ əlaqə yaradılacaq.</p>
+    </section>
+  </div>
 
-        document.querySelectorAll('section:not(.hero)').forEach(section => {
-            observer.observe(section);
-        });
+  <script>
+    // Scroll animation
+    const observerOptions = { threshold: 0.2, rootMargin: '0px 0px -100px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, observerOptions);
+    document.querySelectorAll('section:not(.hero)').forEach(section => observer.observe(section));
 
-        // Smooth scroll behavior
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.style.scrollBehavior = 'smooth';
-        });
+    // Smooth scroll
+    document.addEventListener('DOMContentLoaded', () => { document.body.style.scrollBehavior = 'smooth'; });
 
-        // Parallax effect for shapes
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const shapes = document.querySelectorAll('.shape');
-            shapes.forEach((shape, index) => {
-                const speed = (index + 1) * 0.15;
-                shape.style.transform = `translateY(${scrolled * speed}px)`;
-            });
-        });
-    </script>
+    // Parallax shapes
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset; const shapes = document.querySelectorAll('.shape');
+      shapes.forEach((shape, i) => { const speed = (i + 1) * 0.15; shape.style.transform = `translateY(${scrolled * speed}px)`; });
+    });
+
+    // === Yeni: Paket seçimi və sifariş düyməsi davranışı ===
+    const boxes = document.querySelectorAll('.price-box');
+    const formatMessage = (name, price) => `Sifariş: ${name} – ${price} AZN. Sayt: magicstory.az`;
+
+    boxes.forEach(box => {
+      // Aktiv seçimi vizual dəyiş
+      box.addEventListener('click', (e) => {
+        // Klik düyməyədirsə, selection-u dəyişməyək
+        if (e.target.classList.contains('cta-button')) return;
+        boxes.forEach(b => b.classList.remove('active'));
+        box.classList.add('active');
+      });
+
+      // Sifariş Et
+      const btn = box.querySelector('.cta-button');
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const name = box.dataset.package;
+        const price = box.dataset.price;
+        alert(formatMessage(name, price));
+      });
+    });
+  </script>
 </body>
 </html>
