@@ -2,7 +2,7 @@
 <html lang="az">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MagicStory.az - Uşağınızın Xəyal Dünyası</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -109,14 +109,12 @@
     @media (max-width: 375px) { .price-section { padding: 50px 4%; } }
     @media (min-width: 376px) and (max-width: 414px) { .price-section { padding: 55px 4.5%; } }
 
-    /* === Yeni: Çoxpaketli qutu grid'i === */
     .price-grid { display: grid; grid-template-columns: 1fr; gap: 18px; width: 100%; max-width: 520px; margin: 0 auto; }
     @media (min-width: 415px) { .price-grid { max-width: 350px; } }
 
     .price-box { background: rgba(255,255,255,0.95); border-radius: 30px; padding: 26px 22px; box-shadow: 0 20px 60px rgba(255,155,0,0.4); border: 3px solid rgba(255,201,0,0.3); transform: scale(0.98); animation: scaleIn .6s ease-out forwards; position: relative; }
     @keyframes scaleIn { to { transform: scale(1); } }
 
-    .price-box.active { outline: 3px solid #ffb703; box-shadow: 0 24px 70px rgba(255,155,0,0.55); }
     .badge { position: absolute; top: -12px; right: 16px; background: linear-gradient(135deg,#FF9B00,#FFC900); color:#fff; font-weight:800; font-size:.8rem; padding:6px 12px; border-radius: 999px; box-shadow: 0 10px 24px rgba(255,155,0,.45); }
 
     .price-box h3 { color: #1a1a2e; font-size: 1.4em; font-weight: 900; letter-spacing:.3px; margin-bottom: 8px; }
@@ -143,8 +141,34 @@
     .shape:nth-child(3){ bottom:25%; left:15%; width:120px; height:120px; background: radial-gradient(circle, rgba(255,155,0,.6), transparent); border-radius:50%; animation-delay:14s; }
     @keyframes floatShape { 0%,100%{transform: translate(0,0) rotate(0) scale(1)} 33%{transform: translate(25px,-40px) rotate(120deg) scale(1.1)} 66%{transform: translate(-25px,40px) rotate(240deg) scale(.9)} }
 
-    /* Kiçik info sətiri */
     .note { font-size: .9em; color: #2a2a3e; opacity: .85; margin-top: 8px; }
+
+    /* Əlavə seçim (switch) */
+    .addon {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 14px; margin: 10px 0 6px;
+      border-radius: 18px; border: 2px solid rgba(255,201,0,0.35);
+      background: rgba(255,255,255,0.6);
+    }
+    .addon-text { text-align: left; }
+    .addon-text strong { display: block; font-size: 1.02em; }
+    .addon-text small { opacity: .9; }
+
+    .switch { position: relative; display: inline-block; width: 58px; height: 32px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background: #ddd; transition: .3s; border-radius: 999px;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.05);
+    }
+    .slider:before {
+      position: absolute; content: "";
+      height: 24px; width: 24px; left: 4px; top: 4px;
+      background: #fff; transition: .3s; border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    }
+    input:checked + .slider { background: linear-gradient(135deg,#FF9B00,#FFC900); }
+    input:checked + .slider:before { transform: translateX(26px); }
   </style>
 </head>
 <body>
@@ -162,7 +186,7 @@
       <p>Uşağınızın Xəyalı Gerçək Olur!</p>
     </section>
 
-    <!-- Step 1: Story Creation -->
+    <!-- Step 1 -->
     <section class="step" id="step1">
       <div class="step-number">1</div>
       <h2>🖊️ Hekayənin Yaradılması</h2>
@@ -179,7 +203,7 @@
 
     <div class="process-line"></div>
 
-    <!-- Step 2: Page Design -->
+    <!-- Step 2 -->
     <section class="step" id="step2">
       <div class="step-number">2</div>
       <h2>📖 Səhifələrin Dizaynı</h2>
@@ -196,7 +220,7 @@
 
     <div class="process-line"></div>
 
-    <!-- Step 3: Book Printing -->
+    <!-- Step 3 -->
     <section class="step" id="step3">
       <div class="step-number">3</div>
       <h2>🖨️ Kitabın Çapı</h2>
@@ -213,7 +237,7 @@
 
     <div class="process-line"></div>
 
-    <!-- Step 4: Magic Gifts -->
+    <!-- Step 4 -->
     <section class="step" id="step4">
       <div class="step-number">4</div>
       <h2>🎁 Sehrli Hədiyyələr</h2>
@@ -230,7 +254,7 @@
 
     <div class="process-line"></div>
 
-    <!-- Step 5: Packaging -->
+    <!-- Step 5 -->
     <section class="step" id="step5">
       <div class="step-number">5</div>
       <h2>📦 Paketləmə</h2>
@@ -245,49 +269,38 @@
       </div>
     </section>
 
-    <!-- === Yeni: Qiymətlər Bölməsi (3 paket) === -->
+    <!-- Qiymət: Tək seçim + opsiya -->
     <section class="price-section" id="pricing">
       <div class="price-grid">
-        <!-- Paket 1: Tək Kitab -->
-        <div class="price-box" data-package="Tək Kitab" data-price="30">
-          <h3>📘 Tək Kitab</h3>
-          <div class="subtitle">Fərdi hekayə + rəngli çap</div>
-          <div class="price">30 <span>AZN</span></div>
-          <ul class="features-list">
-            <li>Unikal fərdi hekayə</li>
-            <li>Rəngli çap kitab</li>
-            <li>Uşağınızın şəkli ilə</li>
-          </ul>
-          <button class="cta-button">✨ Sifariş Et</button>
-        </div>
+        <div class="price-box active"
+             data-package="Kitab + Hədiyyəvi Qablaşdırma"
+             data-base-price="30"
+             data-price="30">
+          <div class="badge">Yeni paket</div>
+          <h3>📦 Kitab + Hədiyyəvi Qablaşdırma</h3>
+          <div class="subtitle">Standart paket — baza qiymət: 30 AZN</div>
 
-        <!-- Paket 2: Kitab + Hədiyyə -->
-        <div class="price-box active" data-package="Kitab + Hədiyyə" data-price="35">
-          <div class="badge">Ən çox seçilən</div>
-          <h3>🎁 Kitab + Hədiyyə</h3>
-          <div class="subtitle">Kitab + sehrli hədiyyə</div>
-          <div class="price">35 <span>AZN</span></div>
-          <ul class="features-list">
-            <li>Unikal fərdi hekayə</li>
-            <li>Rəngli çap kitab</li>
-            <li>Bir ədəd sehrli hədiyyə</li>
-            <li>Uşağınızın şəkli ilə</li>
-          </ul>
-          <button class="cta-button">✨ Sifariş Et</button>
-        </div>
+          <div class="price"><span id="totalPrice">30</span> <span>AZN</span></div>
 
-        <!-- Paket 3: Full Paket -->
-        <div class="price-box" data-package="Kitab + Hədiyyə + Bağlama" data-price="40">
-          <h3>📦 Kitab + Hədiyyə + Bağlama</h3>
-          <div class="subtitle">Tam hədiyyəlik set</div>
-          <div class="price">40 <span>AZN</span></div>
           <ul class="features-list">
             <li>Unikal fərdi hekayə</li>
             <li>Rəngli çap kitab</li>
-            <li>Sehrli hədiyyələr</li>
-            <li>Xüsusi dizayn qutusu (bağlama)</li>
             <li>Uşağınızın şəkli ilə</li>
+            <li>Hədiyyəvi dizayn qutusu (bağlama)</li>
           </ul>
+
+          <!-- Əlavə seçim -->
+          <div class="addon">
+            <div class="addon-text">
+              <strong>Əlavə seçim: Karton üz qabığı</strong>
+              <small>+5 AZN (istəyə bağlı)</small>
+            </div>
+            <label class="switch" aria-label="Karton üz qabığı">
+              <input type="checkbox" id="cartonCover"/>
+              <span class="slider"></span>
+            </label>
+          </div>
+
           <button class="cta-button">✨ Sifariş Et</button>
         </div>
       </div>
@@ -312,27 +325,33 @@
       shapes.forEach((shape, i) => { const speed = (i + 1) * 0.15; shape.style.transform = `translateY(${scrolled * speed}px)`; });
     });
 
-    // === Yeni: Paket seçimi və sifariş düyməsi davranışı ===
-    const boxes = document.querySelectorAll('.price-box');
-    const formatMessage = (name, price) => `Sifariş: ${name} – ${price} AZN. Sayt: magicstory.az`;
+    // === Qiymət hesablanması (1 paket + opsiya) ===
+    const box = document.querySelector('.price-box');
+    const priceEl = document.getElementById('totalPrice');
+    const coverCb = document.getElementById('cartonCover');
+    const basePrice = Number(box.dataset.basePrice) || 30;
+    const addonPrice = 5;
 
-    boxes.forEach(box => {
-      // Aktiv seçimi vizual dəyiş
-      box.addEventListener('click', (e) => {
-        // Klik düyməyədirsə, selection-u dəyişməyək
-        if (e.target.classList.contains('cta-button')) return;
-        boxes.forEach(b => b.classList.remove('active'));
-        box.classList.add('active');
-      });
+    function updatePrice() {
+      const total = basePrice + (coverCb.checked ? addonPrice : 0);
+      priceEl.textContent = total;
+      box.dataset.price = String(total);
+      box.dataset.addons = coverCb.checked ? 'Karton üz qabığı' : 'Yoxdur';
+    }
+    updatePrice();
+    coverCb.addEventListener('change', updatePrice);
 
-      // Sifariş Et
-      const btn = box.querySelector('.cta-button');
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const name = box.dataset.package;
-        const price = box.dataset.price;
-        alert(formatMessage(name, price));
-      });
+    // Sifariş mesajı
+    const btn = box.querySelector('.cta-button');
+    const formatMessage = (name, total, addon) =>
+      `Sifariş: ${name} – ${total} AZN.\nƏlavə seçim: ${addon}.\nSayt: magicstory.az`;
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const name = box.dataset.package;
+      const total = box.dataset.price;
+      const addon = box.dataset.addons || 'Yoxdur';
+      alert(formatMessage(name, total, addon));
     });
   </script>
 </body>
