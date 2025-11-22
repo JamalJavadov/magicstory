@@ -13,20 +13,20 @@
       color: #1a1a2e;
       overflow-x: hidden;
       width: 100%;
-      margin: 0 auto;
+      margin: 0;
       position: relative;
       min-height: 100vh;
     }
 
-    @media (min-width: 481px) { body { max-width: 480px; } }
+    /* MƏHDUDİYYƏTİ SİLDİM: BODY ARTIQ 480PX-Ə KİLİDLİ DEYİL */
+    /* @media (min-width: 481px) { body { max-width: 480px; } } */
 
     body::before {
       content: '';
       position: fixed; inset: 0;
       background:
         radial-gradient(circle at 20% 30%, rgba(255, 201, 0, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(255, 155, 0, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(255, 225, 0, 0.2) 0%, transparent 50%);
+        radial-gradient(circle at 80% 70%, rgba(255, 155, 0, 0.3) 0%, transparent 50%);
       pointer-events: none; z-index: 0;
       animation: bgPulse 8s ease-in-out infinite;
     }
@@ -36,165 +36,413 @@
       50% { opacity: 0.8; }
     }
 
-    .container { width: 100%; min-height: 100vh; position: relative; z-index: 1; }
+    .container {
+      width: 100%;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;           /* Desktop üçün mərkəzləmə */
+      margin: 0 auto;
+      padding: 0 16px 60px;        /* Kənarlardan boşluq */
+    }
+
+    /* Puzzle counter indicator */
+    .puzzle-counter {
+      position: fixed; top: 18px; right: 18px; z-index: 1000;
+      background: rgba(255,255,255,0.95); padding: 10px 20px;
+      border-radius: 50px; box-shadow: 0 10px 40px rgba(255,155,0,0.5);
+      border: 3px solid rgba(255,201,0,0.4);
+      font-weight: 900; font-size: 1em; color: #1a1a2e;
+      display: flex; align-items: center; gap: 10px;
+      transition: all 0.3s ease;
+    }
+    .puzzle-counter.complete {
+      background: linear-gradient(135deg, #FF9B00, #FFC900);
+      color: white;
+      animation: celebrate 0.6s ease-out;
+    }
+    @keyframes celebrate {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15) rotate(5deg); }
+    }
+    @media (max-width: 480px) {
+      .puzzle-counter {
+        top: 12px;
+        right: 10px;
+        padding: 8px 16px;
+        font-size: 0.9em;
+      }
+    }
+
+    /* Puzzle pieces floating */
+    .puzzle-piece {
+      position: fixed;
+      font-size: 40px;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0;
+      animation: floatPiece 3s ease-out forwards;
+    }
+    @keyframes floatPiece {
+      0% { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0); }
+      50% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-20vh) rotate(360deg) scale(1.5); }
+    }
 
     section {
-      min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-      padding: 40px 5%; position: relative; opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center; 
+      align-items: center; padding: 60px 5%; position: relative; 
+      opacity: 0; transform: translateY(100px) scale(0.9) rotateX(-10deg);
+      transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
       width: 100%; box-sizing: border-box;
+      transform-style: preserve-3d;
+      perspective: 1000px;
     }
-    @media (max-width: 375px) {
-      section { padding: 30px 4%; min-height: auto; padding-top: 60px; padding-bottom: 60px; }
-    }
-    @media (min-width: 376px) and (max-width: 414px) { section { padding: 35px 4.5%; } }
-    section.visible { opacity: 1; transform: translateY(0); }
 
-    .hero { background: transparent; text-align: center; padding: 60px 5%; width: 100%; }
-    @media (max-width: 375px) { .hero { padding: 50px 4%; } }
+    @media (max-width: 480px) {
+      section { 
+        padding: 70px 4% 70px;
+        min-height: auto;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      section {
+        padding: 80px 8%;
+      }
+    }
+    
+    section.visible { 
+      opacity: 1; 
+      transform: translateY(0) scale(1) rotateX(0deg);
+    }
+    
+    section.locked {
+      filter: grayscale(1) blur(5px);
+      pointer-events: none;
+    }
+
+    /* Puzzle lock overlay */
+    .puzzle-lock {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(3rem, 7vw, 4.5rem);
+      z-index: 10;
+      opacity: 0.3;
+      animation: pulse 2s infinite;
+    }
+    section.visible .puzzle-lock { display: none; }
+
+    .hero { 
+      background: transparent; text-align: center; padding: 80px 5% 40px; width: 100%;
+      opacity: 1 !important;
+      transform: none !important;
+    }
 
     .hero-logo { 
-      width: 100px; height: 100px; margin: 0 auto 20px; 
-      font-size: 80px; line-height: 100px;
+      width: 120px; height: 120px; margin: 0 auto 25px; 
+      font-size: 100px; line-height: 120px;
       animation: float 3s ease-in-out infinite, rotate3d 10s linear infinite; 
       transform-style: preserve-3d;
+      filter: drop-shadow(0 10px 30px rgba(255,155,0,0.5));
     }
-    @keyframes float { 0%,100%{transform:translateY(0) rotateY(0deg)} 50%{transform:translateY(-15px) rotateY(180deg)} }
-    @keyframes rotate3d { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
+    @keyframes float { 
+      0%,100%{transform:translateY(0) rotateY(0deg)} 
+      50%{transform:translateY(-20px) rotateY(180deg)} 
+    }
+    @keyframes rotate3d { 
+      0%{transform:rotateY(0deg)} 
+      100%{transform:rotateY(360deg)} 
+    }
 
     .hero h1 { 
-      font-size: 3em; font-weight: 900; color: #1a1a2e; margin-bottom: 15px; 
+      font-size: clamp(2.4rem, 5vw, 3.4rem);
+      font-weight: 900; color: #1a1a2e; margin-bottom: 20px; 
       text-shadow: 3px 3px 6px rgba(255, 155, 0, 0.3);
-      animation: fadeInDown 1s ease-out; 
-      word-wrap: break-word; 
+      animation: fadeInDown 1s ease-out, textFloat 4s ease-in-out infinite; 
+      word-wrap: break-word;
+      line-height: 1.2;
     }
-    @media (max-width: 375px) { .hero h1 { font-size: 2.2em; } }
-    @media (min-width: 376px) and (max-width: 414px) { .hero h1 { font-size: 2.6em; } }
+    @keyframes textFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
 
     .hero p { 
-      font-size: 1.4em; color: #2a2a3e; font-weight: 700; 
+      font-size: clamp(1.1rem, 3.5vw, 1.7rem);
+      color: #2a2a3e; font-weight: 700; 
       animation: fadeInUp 1s ease-out 0.3s both; 
       text-shadow: 1px 1px 2px rgba(255, 201, 0, 0.2); 
       line-height: 1.5;
     }
-    @media (max-width: 375px) { .hero p { font-size: 1.15em; } }
 
     .hero-subtitle {
-      font-size: 1.1em; color: #2a2a3e; margin-top: 15px;
-      font-weight: 600; animation: fadeInUp 1s ease-out 0.5s both;
-      background: rgba(255,255,255,0.25); padding: 12px 20px; 
+      font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+      color: #2a2a3e; margin-top: 20px;
+      font-weight: 700; animation: fadeInUp 1s ease-out 0.5s both;
+      background: rgba(255,255,255,0.35); padding: 15px 25px; 
       border-radius: 50px; backdrop-filter: blur(10px);
-      display: inline-block; border: 2px solid rgba(255,255,255,0.3);
+      display: inline-block; border: 3px solid rgba(255,255,255,0.4);
+      box-shadow: 0 10px 30px rgba(255,155,0,0.3);
     }
 
+    /* Step cards - puzzle piece style */
     .step {
-      width: 100%; max-width: 95%; text-align: center; 
-      background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
-      border-radius: 35px; padding: 40px 5%; 
-      box-shadow: 0 8px 32px rgba(255,155,0,0.2); 
-      border: 2px solid rgba(255,255,255,0.3);
+      width: 100%; 
+      max-width: 95%; 
+      text-align: center; 
+      background: rgba(255,255,255,0.3); backdrop-filter: blur(15px);
+      border-radius: 40px; padding: 45px 6%; 
+      box-shadow: 0 20px 60px rgba(255,155,0,0.3); 
+      border: 4px solid rgba(255,255,255,0.4);
       box-sizing: border-box; margin: 0 auto;
-      transition: all 0.4s ease;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
       transform-style: preserve-3d;
+      position: relative;
+      overflow: hidden;
     }
+
+    @media (min-width: 768px) {
+      .step {
+        max-width: 780px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .step {
+        max-width: 960px;
+        padding: 50px 7%;
+      }
+    }
+    
+    .step::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+    
+    section.visible .step {
+      animation: puzzlePop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    
+    @keyframes puzzlePop {
+      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+      60% { transform: scale(1.1) rotate(10deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    
     .step:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 15px 45px rgba(255,155,0,0.4);
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 30px 80px rgba(255,155,0,0.5);
+      border-color: rgba(255,201,0,0.6);
     }
-    @media (max-width: 375px) { .step { padding: 30px 4%; border-radius: 28px; max-width: 92%; } }
+    @media (max-width: 480px) { 
+      .step { padding: 35px 5%; border-radius: 30px; max-width: 92%; } 
+    }
 
     .step-number {
-      display: inline-block; width: 80px; height: 80px; 
+      display: inline-block; 
+      width: clamp(70px, 13vw, 95px); 
+      height: clamp(70px, 13vw, 95px); 
       background: linear-gradient(135deg, #FF9B00, #FFC900);
-      border-radius: 50%; line-height: 80px; font-size: 2.2em; font-weight: 900; 
-      margin-bottom: 20px; 
-      box-shadow: 0 10px 30px rgba(255,155,0,0.5);
-      animation: pulse3d 2s infinite; color: #fff; 
-      border: 4px solid rgba(255,255,255,0.4);
+      border-radius: 50%; 
+      line-height: clamp(70px, 13vw, 95px); 
+      font-size: clamp(1.8rem, 4vw, 2.6rem); 
+      font-weight: 900; 
+      margin-bottom: 25px; 
+      box-shadow: 0 15px 45px rgba(255,155,0,0.6);
+      animation: pulse3d 2s infinite, numberGlow 3s ease-in-out infinite; 
+      color: #fff; 
+      border: 5px solid rgba(255,255,255,0.5);
       transform-style: preserve-3d;
+      position: relative;
     }
+    
+    .step-number::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-size: 1.2em;
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+    
+    section.visible .step-number::after {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    
     @keyframes pulse3d { 
-      0%,100%{transform:scale(1);box-shadow:0 10px 30px rgba(255,155,0,.5)} 
-      50%{transform:scale(1.08);box-shadow:0 15px 40px rgba(255,155,0,.7)} 
+      0%,100%{transform:scale(1);box-shadow:0 15px 45px rgba(255,155,0,.6)} 
+      50%{transform:scale(1.1);box-shadow:0 20px 60px rgba(255,155,0,.9)} 
+    }
+    
+    @keyframes numberGlow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
     }
 
     .step h2 { 
-      font-size: 2.1em; margin-bottom: 20px; color: #1a1a2e; font-weight: 900; 
-      text-shadow: 2px 2px 4px rgba(255,201,0,0.2); word-wrap: break-word; 
+      font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+      margin-bottom: 20px; color: #1a1a2e; font-weight: 900; 
+      text-shadow: 2px 2px 4px rgba(255,201,0,0.3); word-wrap: break-word;
+      animation: titleSlide 0.8s ease-out 0.3s both;
     }
-    @media (max-width: 375px) { .step h2 { font-size: 1.7em; margin-bottom: 15px; } }
+    
+    @keyframes titleSlide {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
 
     .step-description { 
-      font-size: 1.1em; line-height: 1.7; margin-bottom: 30px; 
-      color: #2a2a3e; font-weight: 600; word-wrap: break-word; 
+      font-size: clamp(0.98rem, 2.4vw, 1.15rem);
+      line-height: 1.8; margin-bottom: 30px; 
+      color: #2a2a3e; font-weight: 600; word-wrap: break-word;
+      animation: fadeInUp 0.8s ease-out 0.5s both;
     }
-    @media (max-width: 375px) { .step-description { font-size: 1em; margin-bottom: 20px; } }
 
     .special-badge {
-      display: inline-block; background: linear-gradient(135deg, #ffd700, #ffed4e);
-      color: #1a1a2e; font-weight: 900; padding: 10px 25px; border-radius: 50px;
-      margin: 15px 0; font-size: 1.1em; 
-      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
-      animation: badgePulse 2s infinite;
-      border: 3px solid rgba(255,255,255,0.6);
+      display: inline-block; 
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      color: #1a1a2e; font-weight: 900; padding: 10px 22px; 
+      border-radius: 50px; margin: 15px 0; font-size: clamp(0.95rem, 2.3vw, 1.1rem); 
+      box-shadow: 0 12px 35px rgba(255, 215, 0, 0.6);
+      animation: badgePulse 2s infinite, badgeFloat 3s ease-in-out infinite;
+      border: 3px solid rgba(255,255,255,0.7);
     }
     @keyframes badgePulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      50% { transform: scale(1.08); }
+    }
+    @keyframes badgeFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     .image-placeholder {
-      width: 100%; max-width: 95%; height: 320px; 
-      background: rgba(255,255,255,0.4); border-radius: 30px; 
+      width: 100%; 
+      max-width: 95%; 
+      background: rgba(255,255,255,0.45); 
+      border-radius: 35px; 
       display: flex; align-items: center; justify-content: center; 
-      margin: 20px auto; border: 3px solid rgba(255,255,255,0.5); 
+      margin: 25px auto; 
+      border: 4px solid rgba(255,255,255,0.6); 
       position: relative; overflow: hidden; 
-      box-shadow: 0 15px 45px rgba(255,155,0,0.3); 
+      box-shadow: 0 20px 60px rgba(255,155,0,0.4); 
       box-sizing: border-box;
       transform-style: preserve-3d;
-      transition: all 0.4s ease;
+      transition: all 0.5s ease;
+      aspect-ratio: 4 / 3;          /* RESPONSİV HÜNDÜRLÜK */
     }
+    
     .image-placeholder:hover {
-      transform: scale(1.05);
-      box-shadow: 0 20px 60px rgba(255,155,0,0.5);
+      transform: scale(1.05) translateZ(20px);
+      box-shadow: 0 30px 80px rgba(255,155,0,0.6);
+      border-color: rgba(255,201,0,0.8);
     }
-    @media (max-width: 375px) { .image-placeholder { height: 260px; max-width: 100%; border-radius: 22px; } }
-    @media (min-width: 415px) { .image-placeholder { max-width: 360px; } }
+    
+    @media (min-width: 768px) { 
+      .image-placeholder { 
+        max-width: 480px;
+      } 
+    }
 
-    .image-placeholder img { width: 100%; height: 100%; object-fit: cover; border-radius: 27px; }
-    .image-placeholder::before { 
-      content: ''; position: absolute; top: -50%; left: -50%; 
-      width: 200%; height: 200%; 
-      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent); 
-      animation: shimmer 3s infinite; pointer-events: none; z-index: 1; 
+    .image-placeholder img { 
+      width: 100%; height: 100%; object-fit: cover; border-radius: 31px;
+      transition: transform 0.5s ease;
     }
-    @keyframes shimmer { 0%{ transform: translate(-100%,-100%) rotate(45deg);} 100%{ transform: translate(100%,100%) rotate(45deg);} }
+    .image-placeholder:hover img {
+      transform: scale(1.1);
+    }
 
     .icon-grid { 
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; 
-      margin: 30px auto; width: 100%; max-width: 95%; box-sizing: border-box; 
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; 
+      margin: 30px auto; width: 100%; max-width: 95%; box-sizing: border-box;
+      animation: iconsAppear 0.8s ease-out 0.7s both;
     }
-    @media (max-width: 375px) { .icon-grid { gap: 12px; margin: 20px auto; max-width: 100%; } }
-    @media (min-width: 415px) { .icon-grid { max-width: 360px; } }
+    
+    @keyframes iconsAppear {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @media (min-width: 768px) { 
+      .icon-grid { max-width: 480px; } 
+    }
 
     .icon-item { 
-      background: rgba(255,255,255,0.35); padding: 20px 10px; border-radius: 25px; 
-      text-align: center; transition: all .4s ease; 
-      border: 2px solid rgba(255,255,255,0.4); backdrop-filter: blur(5px); 
+      background: rgba(255,255,255,0.4); padding: 22px 12px; border-radius: 28px; 
+      text-align: center; transition: all .4s cubic-bezier(0.34, 1.56, 0.64, 1); 
+      border: 3px solid rgba(255,255,255,0.5); backdrop-filter: blur(8px); 
       box-sizing: border-box;
       transform-style: preserve-3d;
     }
-    @media (max-width: 375px) { .icon-item { padding: 16px 8px; border-radius: 20px; } }
+    
     .icon-item:hover { 
-      transform: translateY(-8px) scale(1.05); 
-      box-shadow: 0 15px 35px rgba(255,155,0,0.4); 
-      background: rgba(255,255,255,0.5); 
+      transform: translateY(-12px) scale(1.1) rotateZ(5deg); 
+      box-shadow: 0 20px 50px rgba(255,155,0,0.5); 
+      background: rgba(255,255,255,0.6);
+      border-color: rgba(255,201,0,0.7);
     }
-    .icon-item .icon { font-size: 2.2em; margin-bottom: 8px; }
+    
+    .icon-item .icon { 
+      font-size: 2.3em; margin-bottom: 10px;
+      animation: iconBounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes iconBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    .icon-item:nth-child(1) .icon { animation-delay: 0s; }
+    .icon-item:nth-child(2) .icon { animation-delay: 0.2s; }
+    .icon-item:nth-child(3) .icon { animation-delay: 0.4s; }
+    
     .icon-item p { 
-      font-size: .95em; color: #1a1a2e; font-weight: 700; 
+      font-size: 0.95rem; color: #1a1a2e; font-weight: 700; 
       margin-top: 8px; word-wrap: break-word; 
     }
-    @media (max-width: 375px) { .icon-item p { font-size: .85em; } }
+
+    /* Connecting lines between steps */
+    .process-line { 
+      width: 8px; height: 140px; 
+      background: linear-gradient(180deg, rgba(255, 225, 0, 0.9), rgba(255, 155, 0, 0.9)); 
+      margin: 40px auto; border-radius: 5px; position: relative; overflow: hidden; 
+      box-shadow: 0 8px 25px rgba(255, 155, 0, 0.4);
+      animation: lineGrow 1s ease-out both;
+    }
+    
+    @keyframes lineGrow {
+      from { height: 0; }
+      to { height: 140px; }
+    }
+    
+    .process-line::after { 
+      content: ''; position: absolute; top: 0; left: 0; 
+      width: 100%; height: 60%; 
+      background: rgba(255, 255, 255, 0.7); 
+      animation: lineFlow 2s infinite; 
+    }
+    @keyframes lineFlow { 
+      0% { top: -60%; } 
+      100% { top: 140%; } 
+    }
 
     .price-section { 
       background: transparent; padding: 60px 5%; text-align: center; 
@@ -202,141 +450,178 @@
     }
 
     .price-grid { 
-      display: grid; grid-template-columns: 1fr; gap: 20px; 
-      width: 100%; max-width: 520px; margin: 0 auto; 
+      display: grid; grid-template-columns: 1fr; gap: 25px; 
+      width: 100%; max-width: 540px; margin: 0 auto; 
     }
-    @media (min-width: 415px) { .price-grid { max-width: 360px; } }
+    @media (min-width: 1024px) {
+      .price-grid {
+        max-width: 720px;
+      }
+    }
 
     .price-box { 
-      background: rgba(255,255,255,0.95); border-radius: 35px; 
-      padding: 30px 25px; 
-      box-shadow: 0 20px 60px rgba(255,155,0,0.4); 
-      border: 3px solid rgba(255,201,0,0.3); 
-      transform: scale(0.98); animation: scaleIn .6s ease-out forwards; 
+      background: rgba(255,255,255,0.95); border-radius: 40px; 
+      padding: 35px 28px; 
+      box-shadow: 0 25px 70px rgba(255,155,0,0.5); 
+      border: 4px solid rgba(255,201,0,0.4); 
+      transform: scale(0.95); 
+      animation: priceBoxAppear 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; 
       position: relative;
       transition: all 0.4s ease;
+      overflow: hidden;
     }
+    
+    @keyframes priceBoxAppear {
+      0% { transform: scale(0.8) rotateY(-90deg); opacity: 0; }
+      100% { transform: scale(1) rotateY(0deg); opacity: 1; }
+    }
+    
+    .price-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,215,0,0.2), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 4s infinite;
+    }
+    
     .price-box:hover {
-      transform: scale(1.02);
-      box-shadow: 0 25px 70px rgba(255,155,0,0.6);
+      transform: scale(1.03) translateY(-10px);
+      box-shadow: 0 35px 90px rgba(255,155,0,0.7);
     }
-    @keyframes scaleIn { to { transform: scale(1); } }
 
     .badge { 
-      position: absolute; top: -14px; right: 18px; 
+      position: absolute; top: -15px; right: 20px; 
       background: linear-gradient(135deg,#ffd700,#ffed4e); 
-      color:#1a1a2e; font-weight:900; font-size:.85rem; 
-      padding:8px 16px; border-radius: 999px; 
-      box-shadow: 0 12px 30px rgba(255,215,0,.6); 
-      border: 2px solid rgba(255,255,255,0.8);
+      color:#1a1a2e; font-weight:900; font-size:.9rem; 
+      padding:10px 18px; border-radius: 999px; 
+      box-shadow: 0 15px 35px rgba(255,215,0,.7); 
+      border: 3px solid rgba(255,255,255,0.9);
+      animation: badgeBounce 2s infinite;
+      z-index: 10;
+    }
+    
+    @keyframes badgeBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
     }
 
     .price-box h3 { 
-      color: #1a1a2e; font-size: 1.5em; font-weight: 900; 
-      letter-spacing:.5px; margin-bottom: 10px; 
+      color: #1a1a2e; font-size: clamp(1.3rem, 2.4vw, 1.7rem); font-weight: 900; 
+      letter-spacing:.5px; margin-bottom: 12px; 
     }
     .subtitle { 
-      font-size: 1em; color: #2a2a3e; opacity: .9; 
-      margin-bottom: 12px; font-weight: 600; 
+      font-size: clamp(0.95rem, 2.2vw, 1.1rem); color: #2a2a3e; opacity: .9; 
+      margin-bottom: 15px; font-weight: 600; 
     }
 
     .price { 
-      font-size: 3.2em; font-weight: 900; 
+      font-size: clamp(2.6rem, 4.3vw, 3.5rem); font-weight: 900; 
       background: linear-gradient(135deg, #FF9B00, #FFC900); 
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-      background-clip: text; margin: 10px 0 16px; 
+      background-clip: text; margin: 12px 0 18px;
+      animation: priceGlow 2s ease-in-out infinite;
     }
+    
+    @keyframes priceGlow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.2); }
+    }
+    
     .price span { 
       font-size: .5em; color: #16213e; 
       -webkit-text-fill-color: initial; background: none; 
     }
 
-    .features-list { text-align: left; margin: 16px 0 10px; color: #16213e; }
+    .features-list { text-align: left; margin: 18px 0 12px; color: #16213e; }
     .features-list li { 
-      padding: 12px 0; font-size: 1.05em; list-style: none; 
-      position: relative; padding-left: 35px; font-weight: 600; 
+      padding: 13px 0; font-size: clamp(0.95rem, 2.1vw, 1.08rem); list-style: none; 
+      position: relative; padding-left: 38px; font-weight: 600;
+      animation: listItemSlide 0.5s ease-out both;
     }
+    
+    .features-list li:nth-child(1) { animation-delay: 0.1s; }
+    .features-list li:nth-child(2) { animation-delay: 0.2s; }
+    .features-list li:nth-child(3) { animation-delay: 0.3s; }
+    .features-list li:nth-child(4) { animation-delay: 0.4s; }
+    .features-list li:nth-child(5) { animation-delay: 0.5s; }
+    
+    @keyframes listItemSlide {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
     .features-list li::before { 
       content: "✨"; position: absolute; left: 0; 
-      font-size: 1.4em; 
+      font-size: 1.5em;
+      animation: sparkle 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.2) rotate(180deg); }
     }
 
     .cta-button { 
       background: linear-gradient(135deg, #FF9B00, #FFC900); 
-      color: #fff; border: none; padding: 18px 25px; 
-      font-size: 1.15em; font-weight: 900; border-radius: 50px; 
-      cursor: pointer; margin-top: 16px; 
-      box-shadow: 0 12px 35px rgba(255,155,0,0.5); 
-      transition: all .3s ease; 
-      text-shadow: 1px 1px 2px rgba(0,0,0,.2); width: 100%; 
-      border: 3px solid rgba(255,255,255,0.3);
+      color: #fff; border: none; padding: 18px 26px; 
+      font-size: clamp(1.05rem, 2.4vw, 1.2rem); font-weight: 900; border-radius: 50px; 
+      cursor: pointer; margin-top: 18px; 
+      box-shadow: 0 15px 45px rgba(255,155,0,0.6); 
+      transition: all .4s cubic-bezier(0.34, 1.56, 0.64, 1); 
+      text-shadow: 1px 1px 3px rgba(0,0,0,.2); width: 100%; 
+      border: 4px solid rgba(255,255,255,0.4);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .cta-button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
     .cta-button:hover { 
-      transform: translateY(-3px) scale(1.02); 
-      box-shadow: 0 18px 45px rgba(255,155,0,0.7); 
+      transform: translateY(-5px) scale(1.05); 
+      box-shadow: 0 25px 60px rgba(255,155,0,0.8);
     }
-
-    .process-line { 
-      width: 6px; height: 120px; 
-      background: linear-gradient(180deg, rgba(255, 225, 0, 0.8), rgba(255, 155, 0, 0.8)); 
-      margin: 35px auto; border-radius: 4px; position: relative; overflow: hidden; 
-      box-shadow: 0 5px 15px rgba(255, 155, 0, 0.3); 
-    }
-    .process-line::after { 
-      content: ''; position: absolute; top: 0; left: 0; 
-      width: 100%; height: 50%; 
-      background: rgba(255, 255, 255, 0.6); 
-      animation: lineFlow 2.5s infinite; 
-    }
-    @keyframes lineFlow { 0% { top: -50%; } 100% { top: 150%; } }
-
-    .floating-shapes { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-    .shape { 
-      position: absolute; opacity: .2; 
-      animation: floatShape 25s infinite ease-in-out; 
-    }
-    .shape:nth-child(1){ 
-      top:15%; left:10%; width:120px; height:120px; 
-      background: radial-gradient(circle, rgba(255,225,0,.6), transparent); 
-      border-radius:50%; animation-delay:0s; 
-    }
-    .shape:nth-child(2){ 
-      top:50%; right:8%; width:100px; height:100px; 
-      background: radial-gradient(circle, rgba(255,201,0,.6), transparent); 
-      border-radius:50%; animation-delay:7s; 
-    }
-    .shape:nth-child(3){ 
-      bottom:25%; left:15%; width:140px; height:140px; 
-      background: radial-gradient(circle, rgba(255,155,0,.6), transparent); 
-      border-radius:50%; animation-delay:14s; 
-    }
-    @keyframes floatShape { 
-      0%,100%{transform: translate(0,0) rotate(0) scale(1)} 
-      33%{transform: translate(30px,-50px) rotate(120deg) scale(1.15)} 
-      66%{transform: translate(-30px,50px) rotate(240deg) scale(.85)} 
-    }
-
-    .note { 
-      font-size: .95em; color: #2a2a3e; 
-      opacity: .85; margin-top: 10px; font-weight: 600;
+    
+    .cta-button:active {
+      transform: translateY(-2px) scale(1.02);
     }
 
     .addon {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; padding: 16px; margin: 12px 0 8px;
-      border-radius: 22px; border: 3px solid rgba(255,201,0,0.35);
-      background: rgba(255,255,255,0.6);
+      gap: 15px; padding: 18px; margin: 15px 0 10px;
+      border-radius: 25px; border: 3px solid rgba(255,201,0,0.4);
+      background: rgba(255,255,255,0.65);
       transition: all 0.3s ease;
     }
     .addon:hover {
-      background: rgba(255,255,255,0.75);
-      border-color: rgba(255,155,0,0.5);
+      background: rgba(255,255,255,0.8);
+      border-color: rgba(255,155,0,0.6);
+      transform: translateX(5px);
     }
     .addon-text { text-align: left; }
-    .addon-text strong { display: block; font-size: 1.05em; color: #1a1a2e; font-weight: 800; }
-    .addon-text small { opacity: .85; color: #2a2a3e; font-weight: 600; }
+    .addon-text strong { display: block; font-size: 1.02em; color: #1a1a2e; font-weight: 800; }
+    .addon-text small { opacity: .85; color: #2a2a3e; font-weight: 600; font-size: 0.9em; }
 
-    .switch { position: relative; display: inline-block; width: 62px; height: 34px; }
+    .switch { position: relative; display: inline-block; width: 65px; height: 36px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
       position: absolute; cursor: pointer; inset: 0;
@@ -345,12 +630,62 @@
     }
     .slider:before {
       position: absolute; content: "";
-      height: 26px; width: 26px; left: 4px; top: 4px;
+      height: 28px; width: 28px; left: 4px; top: 4px;
       background: #fff; transition: .3s; border-radius: 50%;
       box-shadow: 0 4px 15px rgba(0,0,0,.2);
     }
-    input:checked + .slider { background: linear-gradient(135deg,#FF9B00,#FFC900); }
-    input:checked + .slider:before { transform: translateX(28px); }
+    input:checked + .slider { 
+      background: linear-gradient(135deg,#FF9B00,#FFC900);
+      box-shadow: 0 5px 20px rgba(255,155,0,0.5);
+    }
+    input:checked + .slider:before { transform: translateX(29px); }
+
+    .floating-shapes { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .shape { 
+      position: absolute; opacity: .2; 
+      animation: floatShape 30s infinite ease-in-out; 
+    }
+    .shape:nth-child(1){ 
+      top:15%; left:10%; width:140px; height:140px; 
+      background: radial-gradient(circle, rgba(255,225,0,.7), transparent); 
+      border-radius:50%; animation-delay:0s; 
+    }
+    .shape:nth-child(2){ 
+      top:50%; right:8%; width:110px; height:110px; 
+      background: radial-gradient(circle, rgba(255,201,0,.7), transparent); 
+      border-radius:50%; animation-delay:10s; 
+    }
+    .shape:nth-child(3){ 
+      bottom:25%; left:15%; width:160px; height:160px; 
+      background: radial-gradient(circle, rgba(255,155,0,.7), transparent); 
+      border-radius:50%; animation-delay:20s; 
+    }
+    @keyframes floatShape { 
+      0%,100%{transform: translate(0,0) rotate(0) scale(1)} 
+      33%{transform: translate(40px,-60px) rotate(120deg) scale(1.2)} 
+      66%{transform: translate(-40px,60px) rotate(240deg) scale(.9)} 
+    }
+
+    .note { 
+      font-size: 0.95rem; color: #2a2a3e; 
+      opacity: .85; margin-top: 12px; font-weight: 600;
+    }
+
+    /* Confetti animation */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: #ffd700;
+      pointer-events: none;
+      z-index: 9999;
+      animation: confettiFall 3s ease-out forwards;
+    }
+    
+    @keyframes confettiFall {
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
 
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-30px); }
@@ -360,9 +695,31 @@
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Progress bar at top */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 5px;
+      background: linear-gradient(90deg, #FF9B00, #FFC900, #FFD700);
+      z-index: 10000;
+      transition: width 0.3s ease;
+      box-shadow: 0 2px 10px rgba(255,155,0,0.6);
+    }
   </style>
 </head>
 <body>
+  <!-- Progress bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Puzzle counter -->
+  <div class="puzzle-counter" id="puzzleCounter">
+    <span>🧩</span>
+    <span id="counterText">0/5</span>
+  </div>
+
   <div class="floating-shapes">
     <div class="shape"></div>
     <div class="shape"></div>
@@ -379,7 +736,8 @@
     </section>
 
     <!-- Step 1 -->
-    <section class="step" id="step1">
+    <section class="step locked" id="step1" data-step="1">
+      <div class="puzzle-lock">🔒</div>
       <div class="step-number">1</div>
       <h2>✨ Uşağınız Üçün Xüsusi Hekayə</h2>
       <div class="special-badge">🎯 Yalnız Sizin Uşağınız Üçün!</div>
@@ -397,7 +755,8 @@
     <div class="process-line"></div>
 
     <!-- Step 2 -->
-    <section class="step" id="step2">
+    <section class="step locked" id="step2" data-step="2">
+      <div class="puzzle-lock">🔒</div>
       <div class="step-number">2</div>
       <h2>🎨 Uşağınızın Şəkli ilə Dizayn</h2>
       <div class="special-badge">📸 Real Şəkillə İllüstrasiya!</div>
@@ -415,7 +774,8 @@
     <div class="process-line"></div>
 
     <!-- Step 3 -->
-    <section class="step" id="step3">
+    <section class="step locked" id="step3" data-step="3">
+      <div class="puzzle-lock">🔒</div>
       <div class="step-number">3</div>
       <h2>📚 Premium Keyfiyyətli Çap</h2>
       <div class="special-badge">💎 Lüks Materiallar!</div>
@@ -433,7 +793,8 @@
     <div class="process-line"></div>
 
     <!-- Step 4 -->
-    <section class="step" id="step4">
+    <section class="step locked" id="step4" data-step="4">
+      <div class="puzzle-lock">🔒</div>
       <div class="step-number">4</div>
       <h2>🎁 Xüsusi Hədiyyə Qablaşdırma</h2>
       <div class="special-badge">✨ Sehrli Təqdimat!</div>
@@ -449,7 +810,8 @@
     </section>
 
     <!-- Qiymət -->
-    <section class="price-section" id="pricing">
+    <section class="price-section locked" id="pricing" data-step="5">
+      <div class="puzzle-lock">🔒</div>
       <div class="price-grid">
         <div class="price-box active"
              data-package="Xüsusi Fərdi Kitab"
@@ -469,7 +831,6 @@
             <li>Xüsusi hədiyyə qablaşdırma</li>
           </ul>
 
-          <!-- Karton üzlük əlavəsi -->
           <div class="addon">
             <div class="addon-text">
               <strong>💎 Premium Karton Qabıq</strong>
@@ -489,31 +850,107 @@
   </div>
 
   <script>
-    // Scroll animation
-    const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -80px 0px' };
+    // Puzzle game logic
+    let unlockedSteps = 0;
+    const totalSteps = 5;
+    const sections = document.querySelectorAll('section[data-step]');
+    const counter = document.getElementById('counterText');
+    const puzzleCounter = document.getElementById('puzzleCounter');
+    const progressBar = document.getElementById('progressBar');
+
+    // Intersection Observer for puzzle unlocking
+    const observerOptions = { 
+      threshold: 0.3,
+      rootMargin: '0px 0px -150px 0px' 
+    };
+
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { 
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible'); 
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.target.classList.contains('locked')) {
+          unlockSection(entry.target);
         }
       });
     }, observerOptions);
-    document.querySelectorAll('section:not(.hero)').forEach(section => observer.observe(section));
+
+    sections.forEach(section => observer.observe(section));
+
+    function unlockSection(section) {
+      section.classList.remove('locked');
+      section.classList.add('visible');
+      
+      unlockedSteps++;
+      counter.textContent = `${unlockedSteps}/${totalSteps}`;
+      
+      // Update progress bar
+      progressBar.style.width = `${(unlockedSteps / totalSteps) * 100}%`;
+      
+      // Create puzzle piece animation
+      createPuzzlePiece();
+      
+      // Confetti on unlock
+      createConfetti(20);
+      
+      // Check if all unlocked
+      if (unlockedSteps === totalSteps) {
+        puzzleCounter.classList.add('complete');
+        setTimeout(() => {
+          createConfetti(50);
+        }, 300);
+      }
+    }
+
+    function createPuzzlePiece() {
+      const piece = document.createElement('div');
+      piece.className = 'puzzle-piece';
+      piece.textContent = '🧩';
+      piece.style.left = Math.random() * window.innerWidth + 'px';
+      piece.style.top = window.innerHeight + 'px';
+      document.body.appendChild(piece);
+      
+      setTimeout(() => piece.remove(), 3000);
+    }
+
+    function createConfetti(count) {
+      const colors = ['#FFD700', '#FFC900', '#FF9B00', '#FFE100', '#FFB900'];
+      
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * window.innerWidth + 'px';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDelay = Math.random() * 0.5 + 's';
+          confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          document.body.appendChild(confetti);
+          
+          setTimeout(() => confetti.remove(), 3500);
+        }, i * 50);
+      }
+    }
 
     // Smooth scroll
     document.addEventListener('DOMContentLoaded', () => { 
       document.body.style.scrollBehavior = 'smooth'; 
     });
 
-    // Parallax shapes - enhanced
+    // Enhanced parallax
+    let ticking = false;
     window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset; 
-      const shapes = document.querySelectorAll('.shape');
-      shapes.forEach((shape, i) => { 
-        const speed = (i + 1) * 0.2; 
-        const rotate = scrolled * 0.05;
-        shape.style.transform = `translateY(${scrolled * speed}px) rotate(${rotate}deg)`; 
-      });
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrolled = window.pageYOffset;
+          const shapes = document.querySelectorAll('.shape');
+          
+          shapes.forEach((shape, i) => { 
+            const speed = (i + 1) * 0.25; 
+            const rotate = scrolled * 0.08;
+            shape.style.transform = `translateY(${scrolled * speed}px) rotate(${rotate}deg)`; 
+          });
+          
+          ticking = false;
+        });
+        ticking = true;
+      }
     });
 
     // Price calculation
@@ -532,7 +969,7 @@
     updatePrice();
     coverCb.addEventListener('change', updatePrice);
 
-    // Order message
+    // Order button
     const btn = box.querySelector('.cta-button');
     const formatMessage = (name, total, addon) =>
       `🎉 YENİ SİFARİŞ!\n\n📦 Paket: ${name}\n💰 Qiymət: ${total} AZN\n✨ Əlavə: ${addon}\n\n🌐 Sayt: magicstory.az\n\n💝 Uşağınız üçün XÜSUSI və FƏRDİ hekayə kitabı!`;
@@ -542,30 +979,37 @@
       const name = box.dataset.package;
       const total = box.dataset.price;
       const addon = box.dataset.addons || 'Standart qabıq';
+      
+      createConfetti(30);
       alert(formatMessage(name, total, addon));
     });
 
-    // Add 3D tilt effect on price box
+    // 3D tilt effect on price box
     const priceBox = document.querySelector('.price-box');
+    let mouseX = 0;
+    let mouseY = 0;
+    
     priceBox.addEventListener('mousemove', (e) => {
       const rect = priceBox.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = (y - centerY) / 10;
-      const rotateY = (centerX - x) / 10;
-      priceBox.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+      const rotateX = (mouseY - centerY) / 15;
+      const rotateY = (centerX - mouseX) / 15;
+      
+      priceBox.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
     });
+    
     priceBox.addEventListener('mouseleave', () => {
       priceBox.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
     });
 
-    // Add sparkle effect on scroll
+    // Sparkle effect on scroll
     let lastScroll = 0;
     window.addEventListener('scroll', () => {
       const currentScroll = window.pageYOffset;
-      if (Math.abs(currentScroll - lastScroll) > 100) {
+      if (Math.abs(currentScroll - lastScroll) > 150) {
         createSparkle();
         lastScroll = currentScroll;
       }
@@ -577,7 +1021,7 @@
       sparkle.style.position = 'fixed';
       sparkle.style.left = Math.random() * window.innerWidth + 'px';
       sparkle.style.top = Math.random() * window.innerHeight + 'px';
-      sparkle.style.fontSize = '2em';
+      sparkle.style.fontSize = '2.5em';
       sparkle.style.pointerEvents = 'none';
       sparkle.style.zIndex = '9999';
       sparkle.style.animation = 'sparkleFloat 2s ease-out forwards';
@@ -590,9 +1034,9 @@
     const style = document.createElement('style');
     style.textContent = `
       @keyframes sparkleFloat {
-        0% { opacity: 1; transform: translateY(0) scale(0); }
-        50% { opacity: 1; transform: translateY(-50px) scale(1.5); }
-        100% { opacity: 0; transform: translateY(-100px) scale(0); }
+        0% { opacity: 1; transform: translateY(0) scale(0) rotate(0deg); }
+        50% { opacity: 1; transform: translateY(-60px) scale(1.8) rotate(180deg); }
+        100% { opacity: 0; transform: translateY(-120px) scale(0) rotate(360deg); }
       }
     `;
     document.head.appendChild(style);
