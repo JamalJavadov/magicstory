@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MagicStory.az - Uşağınızın Xəyal Dünyası</title>
+  <title>MagicStory.az - Uşağınızın Xüsusi Hekayəsi</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -28,6 +28,12 @@
         radial-gradient(circle at 80% 70%, rgba(255, 155, 0, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 50% 50%, rgba(255, 225, 0, 0.2) 0%, transparent 50%);
       pointer-events: none; z-index: 0;
+      animation: bgPulse 8s ease-in-out infinite;
+    }
+
+    @keyframes bgPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
     }
 
     .container { width: 100%; min-height: 100vh; position: relative; z-index: 1; }
@@ -46,129 +52,314 @@
     .hero { background: transparent; text-align: center; padding: 60px 5%; width: 100%; }
     @media (max-width: 375px) { .hero { padding: 50px 4%; } }
 
-    .hero-logo { width: 80px; height: 80px; margin: 0 auto 20px; animation: float 3s ease-in-out infinite; }
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .hero-logo { 
+      width: 100px; height: 100px; margin: 0 auto 20px; 
+      font-size: 80px; line-height: 100px;
+      animation: float 3s ease-in-out infinite, rotate3d 10s linear infinite; 
+      transform-style: preserve-3d;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0) rotateY(0deg)} 50%{transform:translateY(-15px) rotateY(180deg)} }
+    @keyframes rotate3d { 0%{transform:rotateY(0deg)} 100%{transform:rotateY(360deg)} }
 
-    .hero h1 { font-size: 2.8em; font-weight: 900; color: #1a1a2e; margin-bottom: 15px; text-shadow: 3px 3px 6px rgba(255, 155, 0, 0.3); animation: fadeInDown 1s ease-out; word-wrap: break-word; }
+    .hero h1 { 
+      font-size: 3em; font-weight: 900; color: #1a1a2e; margin-bottom: 15px; 
+      text-shadow: 3px 3px 6px rgba(255, 155, 0, 0.3);
+      animation: fadeInDown 1s ease-out; 
+      word-wrap: break-word; 
+    }
     @media (max-width: 375px) { .hero h1 { font-size: 2.2em; } }
-    @media (min-width: 376px) and (max-width: 414px) { .hero h1 { font-size: 2.5em; } }
-    @media (min-width: 415px) { .hero h1 { font-size: 2.8em; } }
+    @media (min-width: 376px) and (max-width: 414px) { .hero h1 { font-size: 2.6em; } }
 
-    .hero p { font-size: 1.3em; color: #2a2a3e; font-weight: 600; animation: fadeInUp 1s ease-out 0.3s both; text-shadow: 1px 1px 2px rgba(255, 201, 0, 0.2); }
-    @media (max-width: 375px) { .hero p { font-size: 1.1em; } }
-    @media (min-width: 376px) and (max-width: 414px) { .hero p { font-size: 1.2em; } }
+    .hero p { 
+      font-size: 1.4em; color: #2a2a3e; font-weight: 700; 
+      animation: fadeInUp 1s ease-out 0.3s both; 
+      text-shadow: 1px 1px 2px rgba(255, 201, 0, 0.2); 
+      line-height: 1.5;
+    }
+    @media (max-width: 375px) { .hero p { font-size: 1.15em; } }
+
+    .hero-subtitle {
+      font-size: 1.1em; color: #2a2a3e; margin-top: 15px;
+      font-weight: 600; animation: fadeInUp 1s ease-out 0.5s both;
+      background: rgba(255,255,255,0.25); padding: 12px 20px; 
+      border-radius: 50px; backdrop-filter: blur(10px);
+      display: inline-block; border: 2px solid rgba(255,255,255,0.3);
+    }
 
     .step {
-      width: 100%; max-width: 95%; text-align: center; background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
-      border-radius: 30px; padding: 40px 5%; box-shadow: 0 8px 32px rgba(255,155,0,0.2); border: 2px solid rgba(255,255,255,0.3);
+      width: 100%; max-width: 95%; text-align: center; 
+      background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
+      border-radius: 35px; padding: 40px 5%; 
+      box-shadow: 0 8px 32px rgba(255,155,0,0.2); 
+      border: 2px solid rgba(255,255,255,0.3);
       box-sizing: border-box; margin: 0 auto;
+      transition: all 0.4s ease;
+      transform-style: preserve-3d;
     }
-    @media (max-width: 375px) { .step { padding: 30px 4%; border-radius: 25px; max-width: 92%; } }
-    @media (min-width: 376px) and (max-width: 414px) { .step { padding: 35px 4.5%; max-width: 94%; } }
+    .step:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 45px rgba(255,155,0,0.4);
+    }
+    @media (max-width: 375px) { .step { padding: 30px 4%; border-radius: 28px; max-width: 92%; } }
 
     .step-number {
-      display: inline-block; width: 70px; height: 70px; background: linear-gradient(135deg, #FF9B00, #FFC900);
-      border-radius: 50%; line-height: 70px; font-size: 2em; font-weight: bold; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(255,155,0,0.5);
-      animation: pulse 2s infinite; color: #fff; border: 4px solid rgba(255,255,255,0.4);
+      display: inline-block; width: 80px; height: 80px; 
+      background: linear-gradient(135deg, #FF9B00, #FFC900);
+      border-radius: 50%; line-height: 80px; font-size: 2.2em; font-weight: 900; 
+      margin-bottom: 20px; 
+      box-shadow: 0 10px 30px rgba(255,155,0,0.5);
+      animation: pulse3d 2s infinite; color: #fff; 
+      border: 4px solid rgba(255,255,255,0.4);
+      transform-style: preserve-3d;
     }
-    @keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 10px 30px rgba(255,155,0,.5)} 50%{transform:scale(1.08);box-shadow:0 15px 40px rgba(255,155,0,.7)} }
+    @keyframes pulse3d { 
+      0%,100%{transform:scale(1);box-shadow:0 10px 30px rgba(255,155,0,.5)} 
+      50%{transform:scale(1.08);box-shadow:0 15px 40px rgba(255,155,0,.7)} 
+    }
 
-    .step h2 { font-size: 2em; margin-bottom: 20px; color: #1a1a2e; font-weight: 800; text-shadow: 2px 2px 4px rgba(255,201,0,0.2); word-wrap: break-word; }
-    @media (max-width: 375px) { .step h2 { font-size: 1.6em; margin-bottom: 15px; } }
-    @media (min-width: 376px) and (max-width: 414px) { .step h2 { font-size: 1.8em; } }
+    .step h2 { 
+      font-size: 2.1em; margin-bottom: 20px; color: #1a1a2e; font-weight: 900; 
+      text-shadow: 2px 2px 4px rgba(255,201,0,0.2); word-wrap: break-word; 
+    }
+    @media (max-width: 375px) { .step h2 { font-size: 1.7em; margin-bottom: 15px; } }
 
-    .step-description { font-size: 1.05em; line-height: 1.6; margin-bottom: 30px; color: #2a2a3e; font-weight: 500; word-wrap: break-word; }
-    @media (max-width: 375px) { .step-description { font-size: .95em; margin-bottom: 20px; line-height: 1.5; } }
-    @media (min-width: 376px) and (max-width: 414px) { .step-description { font-size: 1em; margin-bottom: 25px; } }
+    .step-description { 
+      font-size: 1.1em; line-height: 1.7; margin-bottom: 30px; 
+      color: #2a2a3e; font-weight: 600; word-wrap: break-word; 
+    }
+    @media (max-width: 375px) { .step-description { font-size: 1em; margin-bottom: 20px; } }
+
+    .special-badge {
+      display: inline-block; background: linear-gradient(135deg, #ffd700, #ffed4e);
+      color: #1a1a2e; font-weight: 900; padding: 10px 25px; border-radius: 50px;
+      margin: 15px 0; font-size: 1.1em; 
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+      animation: badgePulse 2s infinite;
+      border: 3px solid rgba(255,255,255,0.6);
+    }
+    @keyframes badgePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
 
     .image-placeholder {
-      width: 100%; max-width: 95%; height: 300px; background: rgba(255,255,255,0.4); border-radius: 25px; display: flex; align-items: center; justify-content: center; margin: 20px auto; border: 3px solid rgba(255,255,255,0.5); position: relative; overflow: hidden; box-shadow: 0 15px 45px rgba(255,155,0,0.3); box-sizing: border-box;
+      width: 100%; max-width: 95%; height: 320px; 
+      background: rgba(255,255,255,0.4); border-radius: 30px; 
+      display: flex; align-items: center; justify-content: center; 
+      margin: 20px auto; border: 3px solid rgba(255,255,255,0.5); 
+      position: relative; overflow: hidden; 
+      box-shadow: 0 15px 45px rgba(255,155,0,0.3); 
+      box-sizing: border-box;
+      transform-style: preserve-3d;
+      transition: all 0.4s ease;
     }
-    @media (max-width: 375px) { .image-placeholder { height: 250px; max-width: 100%; border-radius: 20px; margin: 15px auto; } }
-    @media (min-width: 376px) and (max-width: 414px) { .image-placeholder { height: 280px; max-width: 98%; } }
-    @media (min-width: 415px) { .image-placeholder { max-width: 350px; } }
+    .image-placeholder:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 60px rgba(255,155,0,0.5);
+    }
+    @media (max-width: 375px) { .image-placeholder { height: 260px; max-width: 100%; border-radius: 22px; } }
+    @media (min-width: 415px) { .image-placeholder { max-width: 360px; } }
 
-    .image-placeholder img { width: 100%; height: 100%; object-fit: cover; border-radius: 22px; }
-    .image-placeholder::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 3s infinite; pointer-events: none; z-index: 1; }
+    .image-placeholder img { width: 100%; height: 100%; object-fit: cover; border-radius: 27px; }
+    .image-placeholder::before { 
+      content: ''; position: absolute; top: -50%; left: -50%; 
+      width: 200%; height: 200%; 
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent); 
+      animation: shimmer 3s infinite; pointer-events: none; z-index: 1; 
+    }
     @keyframes shimmer { 0%{ transform: translate(-100%,-100%) rotate(45deg);} 100%{ transform: translate(100%,100%) rotate(45deg);} }
 
-    .icon-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 30px auto; width: 100%; max-width: 95%; box-sizing: border-box; }
-    @media (max-width: 375px) { .icon-grid { gap: 10px; margin: 20px auto; max-width: 100%; } }
-    @media (min-width: 376px) and (max-width: 414px) { .icon-grid { gap: 11px; margin: 25px auto; max-width: 98%; } }
-    @media (min-width: 415px) { .icon-grid { max-width: 350px; } }
+    .icon-grid { 
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; 
+      margin: 30px auto; width: 100%; max-width: 95%; box-sizing: border-box; 
+    }
+    @media (max-width: 375px) { .icon-grid { gap: 12px; margin: 20px auto; max-width: 100%; } }
+    @media (min-width: 415px) { .icon-grid { max-width: 360px; } }
 
-    .icon-item { background: rgba(255,255,255,0.35); padding: 18px 10px; border-radius: 20px; text-align: center; transition: all .3s ease; border: 2px solid rgba(255,255,255,0.4); backdrop-filter: blur(5px); box-sizing: border-box; }
-    @media (max-width: 375px) { .icon-item { padding: 15px 8px; border-radius: 15px; } }
-    @media (min-width: 376px) and (max-width: 414px) { .icon-item { padding: 16px 9px; border-radius: 18px; } }
-    .icon-item:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 15px 35px rgba(255,155,0,0.4); background: rgba(255,255,255,0.5); }
-    .icon-item p { font-size: .9em; color: #1a1a2e; font-weight: 600; margin-top: 8px; word-wrap: break-word; }
-    @media (max-width: 375px) { .icon-item p { font-size: .8em; margin-top: 6px; } }
-    @media (min-width: 376px) and (max-width: 414px) { .icon-item p { font-size: .85em; margin-top: 7px; } }
+    .icon-item { 
+      background: rgba(255,255,255,0.35); padding: 20px 10px; border-radius: 25px; 
+      text-align: center; transition: all .4s ease; 
+      border: 2px solid rgba(255,255,255,0.4); backdrop-filter: blur(5px); 
+      box-sizing: border-box;
+      transform-style: preserve-3d;
+    }
+    @media (max-width: 375px) { .icon-item { padding: 16px 8px; border-radius: 20px; } }
+    .icon-item:hover { 
+      transform: translateY(-8px) scale(1.05); 
+      box-shadow: 0 15px 35px rgba(255,155,0,0.4); 
+      background: rgba(255,255,255,0.5); 
+    }
+    .icon-item .icon { font-size: 2.2em; margin-bottom: 8px; }
+    .icon-item p { 
+      font-size: .95em; color: #1a1a2e; font-weight: 700; 
+      margin-top: 8px; word-wrap: break-word; 
+    }
+    @media (max-width: 375px) { .icon-item p { font-size: .85em; } }
 
-    .price-section { background: transparent; padding: 60px 5%; text-align: center; width: 100%; box-sizing: border-box; }
-    @media (max-width: 375px) { .price-section { padding: 50px 4%; } }
-    @media (min-width: 376px) and (max-width: 414px) { .price-section { padding: 55px 4.5%; } }
+    .price-section { 
+      background: transparent; padding: 60px 5%; text-align: center; 
+      width: 100%; box-sizing: border-box; 
+    }
 
-    .price-grid { display: grid; grid-template-columns: 1fr; gap: 18px; width: 100%; max-width: 520px; margin: 0 auto; }
-    @media (min-width: 415px) { .price-grid { max-width: 350px; } }
+    .price-grid { 
+      display: grid; grid-template-columns: 1fr; gap: 20px; 
+      width: 100%; max-width: 520px; margin: 0 auto; 
+    }
+    @media (min-width: 415px) { .price-grid { max-width: 360px; } }
 
-    .price-box { background: rgba(255,255,255,0.95); border-radius: 30px; padding: 26px 22px; box-shadow: 0 20px 60px rgba(255,155,0,0.4); border: 3px solid rgba(255,201,0,0.3); transform: scale(0.98); animation: scaleIn .6s ease-out forwards; position: relative; }
+    .price-box { 
+      background: rgba(255,255,255,0.95); border-radius: 35px; 
+      padding: 30px 25px; 
+      box-shadow: 0 20px 60px rgba(255,155,0,0.4); 
+      border: 3px solid rgba(255,201,0,0.3); 
+      transform: scale(0.98); animation: scaleIn .6s ease-out forwards; 
+      position: relative;
+      transition: all 0.4s ease;
+    }
+    .price-box:hover {
+      transform: scale(1.02);
+      box-shadow: 0 25px 70px rgba(255,155,0,0.6);
+    }
     @keyframes scaleIn { to { transform: scale(1); } }
 
-    .badge { position: absolute; top: -12px; right: 16px; background: linear-gradient(135deg,#FF9B00,#FFC900); color:#fff; font-weight:800; font-size:.8rem; padding:6px 12px; border-radius: 999px; box-shadow: 0 10px 24px rgba(255,155,0,.45); }
+    .badge { 
+      position: absolute; top: -14px; right: 18px; 
+      background: linear-gradient(135deg,#ffd700,#ffed4e); 
+      color:#1a1a2e; font-weight:900; font-size:.85rem; 
+      padding:8px 16px; border-radius: 999px; 
+      box-shadow: 0 12px 30px rgba(255,215,0,.6); 
+      border: 2px solid rgba(255,255,255,0.8);
+    }
 
-    .price-box h3 { color: #1a1a2e; font-size: 1.4em; font-weight: 900; letter-spacing:.3px; margin-bottom: 8px; }
-    .subtitle { font-size: .95em; color: #2a2a3e; opacity: .9; margin-bottom: 10px; font-weight: 600; }
+    .price-box h3 { 
+      color: #1a1a2e; font-size: 1.5em; font-weight: 900; 
+      letter-spacing:.5px; margin-bottom: 10px; 
+    }
+    .subtitle { 
+      font-size: 1em; color: #2a2a3e; opacity: .9; 
+      margin-bottom: 12px; font-weight: 600; 
+    }
 
-    .price { font-size: 3em; font-weight: 900; background: linear-gradient(135deg, #FF9B00, #FFC900); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 8px 0 14px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
-    .price span { font-size: .5em; color: #16213e; -webkit-text-fill-color: initial; background: none; }
+    .price { 
+      font-size: 3.2em; font-weight: 900; 
+      background: linear-gradient(135deg, #FF9B00, #FFC900); 
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+      background-clip: text; margin: 10px 0 16px; 
+    }
+    .price span { 
+      font-size: .5em; color: #16213e; 
+      -webkit-text-fill-color: initial; background: none; 
+    }
 
-    .features-list { text-align: left; margin: 14px 0 8px; color: #16213e; }
-    .features-list li { padding: 10px 0; font-size: 1.02em; list-style: none; position: relative; padding-left: 32px; font-weight: 500; }
-    .features-list li::before { content: "✓"; position: absolute; left: 0; color: #FF9B00; font-weight: bold; font-size: 1.3em; }
+    .features-list { text-align: left; margin: 16px 0 10px; color: #16213e; }
+    .features-list li { 
+      padding: 12px 0; font-size: 1.05em; list-style: none; 
+      position: relative; padding-left: 35px; font-weight: 600; 
+    }
+    .features-list li::before { 
+      content: "✨"; position: absolute; left: 0; 
+      font-size: 1.4em; 
+    }
 
-    .cta-button { background: linear-gradient(135deg, #FF9B00, #FFC900); color: #fff; border: none; padding: 16px 22px; font-size: 1.05em; font-weight: bold; border-radius: 50px; cursor: pointer; margin-top: 14px; box-shadow: 0 12px 35px rgba(255,155,0,0.5); transition: all .3s ease; text-shadow: 1px 1px 2px rgba(0,0,0,.2); width: 100%; }
-    .cta-button:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 18px 45px rgba(255,155,0,0.7); }
+    .cta-button { 
+      background: linear-gradient(135deg, #FF9B00, #FFC900); 
+      color: #fff; border: none; padding: 18px 25px; 
+      font-size: 1.15em; font-weight: 900; border-radius: 50px; 
+      cursor: pointer; margin-top: 16px; 
+      box-shadow: 0 12px 35px rgba(255,155,0,0.5); 
+      transition: all .3s ease; 
+      text-shadow: 1px 1px 2px rgba(0,0,0,.2); width: 100%; 
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+    .cta-button:hover { 
+      transform: translateY(-3px) scale(1.02); 
+      box-shadow: 0 18px 45px rgba(255,155,0,0.7); 
+    }
 
-    .process-line { width: 5px; height: 100px; background: linear-gradient(180deg, rgba(255, 225, 0, 0.8), rgba(255, 155, 0, 0.8)); margin: 30px auto; border-radius: 3px; position: relative; overflow: hidden; box-shadow: 0 5px 15px rgba(255, 155, 0, 0.3); }
-    .process-line::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 40%; background: rgba(255, 255, 255, 0.6); animation: lineFlow 2.5s infinite; }
-    @keyframes lineFlow { 0% { top: -40%; } 100% { top: 140%; } }
+    .process-line { 
+      width: 6px; height: 120px; 
+      background: linear-gradient(180deg, rgba(255, 225, 0, 0.8), rgba(255, 155, 0, 0.8)); 
+      margin: 35px auto; border-radius: 4px; position: relative; overflow: hidden; 
+      box-shadow: 0 5px 15px rgba(255, 155, 0, 0.3); 
+    }
+    .process-line::after { 
+      content: ''; position: absolute; top: 0; left: 0; 
+      width: 100%; height: 50%; 
+      background: rgba(255, 255, 255, 0.6); 
+      animation: lineFlow 2.5s infinite; 
+    }
+    @keyframes lineFlow { 0% { top: -50%; } 100% { top: 150%; } }
 
     .floating-shapes { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-    .shape { position: absolute; opacity: .15; animation: floatShape 25s infinite ease-in-out; }
-    .shape:nth-child(1){ top:15%; left:10%; width:100px; height:100px; background: radial-gradient(circle, rgba(255,225,0,.6), transparent); border-radius:50%; animation-delay:0s; }
-    .shape:nth-child(2){ top:50%; right:8%; width:80px; height:80px; background: radial-gradient(circle, rgba(255,201,0,.6), transparent); border-radius:50%; animation-delay:7s; }
-    .shape:nth-child(3){ bottom:25%; left:15%; width:120px; height:120px; background: radial-gradient(circle, rgba(255,155,0,.6), transparent); border-radius:50%; animation-delay:14s; }
-    @keyframes floatShape { 0%,100%{transform: translate(0,0) rotate(0) scale(1)} 33%{transform: translate(25px,-40px) rotate(120deg) scale(1.1)} 66%{transform: translate(-25px,40px) rotate(240deg) scale(.9)} }
+    .shape { 
+      position: absolute; opacity: .2; 
+      animation: floatShape 25s infinite ease-in-out; 
+    }
+    .shape:nth-child(1){ 
+      top:15%; left:10%; width:120px; height:120px; 
+      background: radial-gradient(circle, rgba(255,225,0,.6), transparent); 
+      border-radius:50%; animation-delay:0s; 
+    }
+    .shape:nth-child(2){ 
+      top:50%; right:8%; width:100px; height:100px; 
+      background: radial-gradient(circle, rgba(255,201,0,.6), transparent); 
+      border-radius:50%; animation-delay:7s; 
+    }
+    .shape:nth-child(3){ 
+      bottom:25%; left:15%; width:140px; height:140px; 
+      background: radial-gradient(circle, rgba(255,155,0,.6), transparent); 
+      border-radius:50%; animation-delay:14s; 
+    }
+    @keyframes floatShape { 
+      0%,100%{transform: translate(0,0) rotate(0) scale(1)} 
+      33%{transform: translate(30px,-50px) rotate(120deg) scale(1.15)} 
+      66%{transform: translate(-30px,50px) rotate(240deg) scale(.85)} 
+    }
 
-    .note { font-size: .9em; color: #2a2a3e; opacity: .85; margin-top: 8px; }
+    .note { 
+      font-size: .95em; color: #2a2a3e; 
+      opacity: .85; margin-top: 10px; font-weight: 600;
+    }
 
-    /* Əlavə seçim (switch) */
     .addon {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; padding: 14px; margin: 10px 0 6px;
-      border-radius: 18px; border: 2px solid rgba(255,201,0,0.35);
+      gap: 12px; padding: 16px; margin: 12px 0 8px;
+      border-radius: 22px; border: 3px solid rgba(255,201,0,0.35);
       background: rgba(255,255,255,0.6);
+      transition: all 0.3s ease;
+    }
+    .addon:hover {
+      background: rgba(255,255,255,0.75);
+      border-color: rgba(255,155,0,0.5);
     }
     .addon-text { text-align: left; }
-    .addon-text strong { display: block; font-size: 1.02em; }
-    .addon-text small { opacity: .9; }
+    .addon-text strong { display: block; font-size: 1.05em; color: #1a1a2e; font-weight: 800; }
+    .addon-text small { opacity: .85; color: #2a2a3e; font-weight: 600; }
 
-    .switch { position: relative; display: inline-block; width: 58px; height: 32px; }
+    .switch { position: relative; display: inline-block; width: 62px; height: 34px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
       position: absolute; cursor: pointer; inset: 0;
-      background: #ddd; transition: .3s; border-radius: 999px;
-      box-shadow: inset 0 0 0 2px rgba(0,0,0,.05);
+      background: #ccc; transition: .3s; border-radius: 999px;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.08);
     }
     .slider:before {
       position: absolute; content: "";
-      height: 24px; width: 24px; left: 4px; top: 4px;
+      height: 26px; width: 26px; left: 4px; top: 4px;
       background: #fff; transition: .3s; border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      box-shadow: 0 4px 15px rgba(0,0,0,.2);
     }
     input:checked + .slider { background: linear-gradient(135deg,#FF9B00,#FFC900); }
-    input:checked + .slider:before { transform: translateX(26px); }
+    input:checked + .slider:before { transform: translateX(28px); }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -181,23 +372,25 @@
   <div class="container">
     <!-- Hero Section -->
     <section class="hero visible">
-      <div class="hero-logo">🎨</div>
+      <div class="hero-logo">📖</div>
       <h1>MagicStory.az</h1>
-      <p>Uşağınızın Xəyalı Gerçək Olur!</p>
+      <p>Uşağınız Hekayənin Baş Qəhrəmanıdır!</p>
+      <div class="hero-subtitle">🌟 100% Xüsusi və Fərdi Hekayələr 🌟</div>
     </section>
 
     <!-- Step 1 -->
     <section class="step" id="step1">
       <div class="step-number">1</div>
-      <h2>🖊️ Hekayənin Yaradılması</h2>
-      <p class="step-description">Uşağınızın xəyalındaki personajları, sevimli heyvanları və gələcək arzularını öyrənirik. Hər bir hekayə unikal və xüsusidir!</p>
+      <h2>✨ Uşağınız Üçün Xüsusi Hekayə</h2>
+      <div class="special-badge">🎯 Yalnız Sizin Uşağınız Üçün!</div>
+      <p class="step-description">Uşağınızın adı, sevimli heyvanları və arzularından ibarət TAM FƏRDİ hekayə yazılır. Hər bir söz, hər bir səhifə yalnız sizin övladınız üçün yaradılır!</p>
       <div class="image-placeholder">
-        <img src="images/step1.png" alt="Hekayə yaradılması" />
+        <img src="images/step1.png" alt="Fərdi hekayə yaradılması" />
       </div>
       <div class="icon-grid">
-        <div class="icon-item"><div style="font-size:2em;">🎭</div><p>Personaj</p></div>
-        <div class="icon-item"><div style="font-size:2em;">🦄</div><p>Heyvanlar</p></div>
-        <div class="icon-item"><div style="font-size:2em;">✨</div><p>Xəyal</p></div>
+        <div class="icon-item"><div class="icon">👶</div><p>Uşağınızın Adı</p></div>
+        <div class="icon-item"><div class="icon">🦄</div><p>Sevimli Personajlar</p></div>
+        <div class="icon-item"><div class="icon">💫</div><p>Xüsusi Macəra</p></div>
       </div>
     </section>
 
@@ -206,15 +399,16 @@
     <!-- Step 2 -->
     <section class="step" id="step2">
       <div class="step-number">2</div>
-      <h2>📖 Səhifələrin Dizaynı</h2>
-      <p class="step-description">Hekayəyə və personajlara uyğun olaraq kitabın hər bir səhifəsi profesional şəkildə dizayn edilir.</p>
+      <h2>🎨 Uşağınızın Şəkli ilə Dizayn</h2>
+      <div class="special-badge">📸 Real Şəkillə İllüstrasiya!</div>
+      <p class="step-description">Uşağınızın REAL ŞƏKLİ hekayəyə əlavə edilir! O, hekayənin BAŞ QƏHRƏMANI olaraq öz macəralarını yaşayır. Hər səhifə peşəkar dizaynerlərimiz tərəfindən xüsusi hazırlanır!</p>
       <div class="image-placeholder">
-        <img src="images/step2.png" alt="Səhifələrin dizaynı" />
+        <img src="images/step2.png" alt="Şəkillə dizayn" />
       </div>
       <div class="icon-grid">
-        <div class="icon-item"><div style="font-size:2em;">🎨</div><p>Rənglər</p></div>
-        <div class="icon-item"><div style="font-size:2em;">🖼️</div><p>İllüstrasiya</p></div>
-        <div class="icon-item"><div style="font-size:2em;">📝</div><p>Mətn</p></div>
+        <div class="icon-item"><div class="icon">📷</div><p>Real Şəkil</p></div>
+        <div class="icon-item"><div class="icon">🎨</div><p>Peşəkar Dizayn</p></div>
+        <div class="icon-item"><div class="icon">⭐</div><p>Baş Qəhrəman</p></div>
       </div>
     </section>
 
@@ -223,15 +417,16 @@
     <!-- Step 3 -->
     <section class="step" id="step3">
       <div class="step-number">3</div>
-      <h2>🖨️ Kitabın Çapı</h2>
-      <p class="step-description">Yüksək keyfiyyətli çap texnologiyası ilə kitabınız hazırlanır. Hər bir detalda mükəmməllik!</p>
+      <h2>📚 Premium Keyfiyyətli Çap</h2>
+      <div class="special-badge">💎 Lüks Materiallar!</div>
+      <p class="step-description">Yüksək keyfiyyətli kağız və parlaq rəngli çap! Kitab uzun illər əlinizdə qalacaq xatirə əşyasıdır. Hər detalda mükəmməllik!</p>
       <div class="image-placeholder">
-        <img src="images/step3.png" alt="Kitabın çapı" />
+        <img src="images/step3.png" alt="Premium çap" />
       </div>
       <div class="icon-grid">
-        <div class="icon-item"><div style="font-size:2em;">📄</div><p>Keyfiyyətli kağız</p></div>
-        <div class="icon-item"><div style="font-size:2em;">🌈</div><p>Parlaq rənglər</p></div>
-        <div class="icon-item"><div style="font-size:2em;">📚</div><p>Möhkəm cild</p></div>
+        <div class="icon-item"><div class="icon">📄</div><p>Premium Kağız</p></div>
+        <div class="icon-item"><div class="icon">🌈</div><p>HD Rənglər</p></div>
+        <div class="icon-item"><div class="icon">💪</div><p>Möhkəm Cild</p></div>
       </div>
     </section>
 
@@ -240,119 +435,167 @@
     <!-- Step 4 -->
     <section class="step" id="step4">
       <div class="step-number">4</div>
-      <h2>🎁 Sehrli Hədiyyələr</h2>
-      <p class="step-description">Brelok, Corab və fərqli sehrli hədiyyələr</p>
+      <h2>🎁 Xüsusi Hədiyyə Qablaşdırma</h2>
+      <div class="special-badge">✨ Sehrli Təqdimat!</div>
+      <p class="step-description">Gözəl dizayn edilmiş hədiyyə qutusunda təqdim olunur! Açılışı özü bir bayramdır. Uşağınız bu anı heç vaxt unutmayacaq!</p>
       <div class="image-placeholder">
-        <img src="images/step4.png" alt="Sehrli hədiyyələr" />
+        <img src="images/step5.png" alt="Hədiyyə qablaşdırma" />
       </div>
       <div class="icon-grid">
-        <div class="icon-item"><div style="font-size:2em;">🖨️</div><p>3D Çap</p></div>
-        <div class="icon-item"><div style="font-size:2em;">🎨</div><p>Rənglənmə</p></div>
-        <div class="icon-item"><div style="font-size:2em;">✨</div><p>Hazır</p></div>
+        <div class="icon-item"><div class="icon">🎀</div><p>Dizayn Qutu</p></div>
+        <div class="icon-item"><div class="icon">💝</div><p>Bayram Paketi</p></div>
+        <div class="icon-item"><div class="icon">🎉</div><p>Xatirə Əşya</p></div>
       </div>
     </section>
 
-    <div class="process-line"></div>
-
-    <!-- Step 5 -->
-    <section class="step" id="step5">
-      <div class="step-number">5</div>
-      <h2>📦 Paketləmə</h2>
-      <p class="step-description">Kitab və breloklar xüsusi qutuda gözəl şəkildə paketlənir və təhvil verilməyə hazır olur!</p>
-      <div class="image-placeholder">
-        <img src="images/step5.png" alt="Paketləmə" />
-      </div>
-      <div class="icon-grid">
-        <div class="icon-item"><div style="font-size:2em;">🎀</div><p>Dizayn qutu</p></div>
-        <div class="icon-item"><div style="font-size:2em;">💝</div><p>Hədiyyə paketi</p></div>
-        <div class="icon-item"><div style="font-size:2em;">✅</div><p>Təhvil hazır</p></div>
-      </div>
-    </section>
-
-    <!-- Qiymət: Tək seçim + opsiya -->
+    <!-- Qiymət -->
     <section class="price-section" id="pricing">
       <div class="price-grid">
         <div class="price-box active"
-             data-package="Kitab + Hədiyyəvi Qablaşdırma"
+             data-package="Xüsusi Fərdi Kitab"
              data-base-price="30"
              data-price="30">
-          <div class="badge">Yeni paket</div>
-          <h3>📦 Kitab + Hədiyyəvi Qablaşdırma</h3>
-          <div class="subtitle">Standart paket — baza qiymət: 30 AZN</div>
+          <div class="badge">🔥 Populyar</div>
+          <h3>📖 Xüsusi Fərdi Hekayə Kitabı</h3>
+          <div class="subtitle">Uşağınız Baş Qəhrəmandır!</div>
 
           <div class="price"><span id="totalPrice">30</span> <span>AZN</span></div>
 
           <ul class="features-list">
-            <li>Unikal fərdi hekayə</li>
-            <li>Rəngli çap kitab</li>
-            <li>Uşağınızın şəkli ilə</li>
-            <li>Hədiyyəvi dizayn qutusu (bağlama)</li>
+            <li>100% Fərdi və xüsusi hekayə</li>
+            <li>Uşağınızın real şəkli ilə</li>
+            <li>Baş qəhrəman sizin uşağınızdır</li>
+            <li>Premium keyfiyyətli çap</li>
+            <li>Xüsusi hədiyyə qablaşdırma</li>
           </ul>
 
-          <!-- Əlavə seçim -->
+          <!-- Karton üzlük əlavəsi -->
           <div class="addon">
             <div class="addon-text">
-              <strong>Əlavə seçim: Karton üz qabığı</strong>
-              <small>+5 AZN (istəyə bağlı)</small>
+              <strong>💎 Premium Karton Qabıq</strong>
+              <small>Daha möhkəm və lüks görünüş - +10 AZN</small>
             </div>
-            <label class="switch" aria-label="Karton üz qabığı">
+            <label class="switch" aria-label="Karton qabıq əlavə et">
               <input type="checkbox" id="cartonCover"/>
               <span class="slider"></span>
             </label>
           </div>
 
-          <button class="cta-button">✨ Sifariş Et</button>
+          <button class="cta-button">🎁 İNDİ SİFARİŞ ET</button>
         </div>
       </div>
-      <p class="note">Qiymətlər AZN ilə göstərilib. Sifarişi təsdiqlədikdən sonra operativ əlaqə yaradılacaq.</p>
+      <p class="note">✨ Qiymətlər AZN ilə göstərilib. Sifarişdən sonra sizinlə əlaqə saxlanacaq.</p>
     </section>
   </div>
 
   <script>
     // Scroll animation
-    const observerOptions = { threshold: 0.2, rootMargin: '0px 0px -100px 0px' };
+    const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -80px 0px' };
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+      entries.forEach(entry => { 
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible'); 
+        }
+      });
     }, observerOptions);
     document.querySelectorAll('section:not(.hero)').forEach(section => observer.observe(section));
 
     // Smooth scroll
-    document.addEventListener('DOMContentLoaded', () => { document.body.style.scrollBehavior = 'smooth'; });
-
-    // Parallax shapes
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset; const shapes = document.querySelectorAll('.shape');
-      shapes.forEach((shape, i) => { const speed = (i + 1) * 0.15; shape.style.transform = `translateY(${scrolled * speed}px)`; });
+    document.addEventListener('DOMContentLoaded', () => { 
+      document.body.style.scrollBehavior = 'smooth'; 
     });
 
-    // === Qiymət hesablanması (1 paket + opsiya) ===
+    // Parallax shapes - enhanced
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset; 
+      const shapes = document.querySelectorAll('.shape');
+      shapes.forEach((shape, i) => { 
+        const speed = (i + 1) * 0.2; 
+        const rotate = scrolled * 0.05;
+        shape.style.transform = `translateY(${scrolled * speed}px) rotate(${rotate}deg)`; 
+      });
+    });
+
+    // Price calculation
     const box = document.querySelector('.price-box');
     const priceEl = document.getElementById('totalPrice');
     const coverCb = document.getElementById('cartonCover');
     const basePrice = Number(box.dataset.basePrice) || 30;
-    const addonPrice = 5;
+    const addonPrice = 10;
 
     function updatePrice() {
       const total = basePrice + (coverCb.checked ? addonPrice : 0);
       priceEl.textContent = total;
       box.dataset.price = String(total);
-      box.dataset.addons = coverCb.checked ? 'Karton üz qabığı' : 'Yoxdur';
+      box.dataset.addons = coverCb.checked ? 'Premium Karton Qabıq (+10 AZN)' : 'Standart qabıq';
     }
     updatePrice();
     coverCb.addEventListener('change', updatePrice);
 
-    // Sifariş mesajı
+    // Order message
     const btn = box.querySelector('.cta-button');
     const formatMessage = (name, total, addon) =>
-      `Sifariş: ${name} – ${total} AZN.\nƏlavə seçim: ${addon}.\nSayt: magicstory.az`;
+      `🎉 YENİ SİFARİŞ!\n\n📦 Paket: ${name}\n💰 Qiymət: ${total} AZN\n✨ Əlavə: ${addon}\n\n🌐 Sayt: magicstory.az\n\n💝 Uşağınız üçün XÜSUSI və FƏRDİ hekayə kitabı!`;
 
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const name = box.dataset.package;
       const total = box.dataset.price;
-      const addon = box.dataset.addons || 'Yoxdur';
+      const addon = box.dataset.addons || 'Standart qabıq';
       alert(formatMessage(name, total, addon));
     });
+
+    // Add 3D tilt effect on price box
+    const priceBox = document.querySelector('.price-box');
+    priceBox.addEventListener('mousemove', (e) => {
+      const rect = priceBox.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+      priceBox.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    });
+    priceBox.addEventListener('mouseleave', () => {
+      priceBox.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+    });
+
+    // Add sparkle effect on scroll
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      if (Math.abs(currentScroll - lastScroll) > 100) {
+        createSparkle();
+        lastScroll = currentScroll;
+      }
+    });
+
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.innerHTML = '✨';
+      sparkle.style.position = 'fixed';
+      sparkle.style.left = Math.random() * window.innerWidth + 'px';
+      sparkle.style.top = Math.random() * window.innerHeight + 'px';
+      sparkle.style.fontSize = '2em';
+      sparkle.style.pointerEvents = 'none';
+      sparkle.style.zIndex = '9999';
+      sparkle.style.animation = 'sparkleFloat 2s ease-out forwards';
+      document.body.appendChild(sparkle);
+      
+      setTimeout(() => sparkle.remove(), 2000);
+    }
+
+    // Add sparkle animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes sparkleFloat {
+        0% { opacity: 1; transform: translateY(0) scale(0); }
+        50% { opacity: 1; transform: translateY(-50px) scale(1.5); }
+        100% { opacity: 0; transform: translateY(-100px) scale(0); }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
