@@ -1130,31 +1130,21 @@
       <section class="price-section step-section locked" data-step="5" id="pricing" aria-label="Qiymət və paket">
         <div class="puzzle-lock">🔒</div>
         <div class="price-grid">
-          <article class="price-box" data-package="Xüsusi Fərdi Kitab" data-base-price="30" data-price="30">
+          <article class="price-box" data-package="Xüsusi Fərdi Kitab" data-base-price="50" data-price="50" data-addons="Premium karton üzlük, ikiqat cildlənmə">
             <div class="badge">🔥 Ən çox seçilən paket</div>
             <h2 class="price-title">📖 Xüsusi Fərdi Hekayə Kitabı</h2>
-            <p class="price-subtitle">Uşağınız bu kitabda həqiqi baş qəhrəmandır.</p>
+            <p class="price-subtitle">Premium karton üzlük və ikiqat cildlənmə ilə uzun illər istifadə üçün hazırlanır.</p>
             <div class="price-value">
-              <span id="totalPrice">30</span>
+              <span id="totalPrice">50</span>
               <span class="price-currency">AZN</span>
             </div>
             <ul class="features-list">
               <li>100% fərdi və xüsusi yazılmış hekayə</li>
               <li>Uşağınızın real şəkli ilə illüstrasiya</li>
               <li>Baş qəhrəman olaraq yalnız sizin övladınız</li>
-              <li>Premium keyfiyyətli, möhkəm çap</li>
-              <li>Hədiyyə üçün xüsusi qablaşdırma</li>
+              <li>Premium karton üzlük və ikiqat cildlənmə</li>
+              <li>Uzun illər istifadə üçün möhkəm və dayanıqlı</li>
             </ul>
-            <div class="addon">
-              <div class="addon-text">
-                <strong>💎 Premium karton qabıq</strong>
-                <small>Daha möhkəm və lüks görünüş – +10 AZN</small>
-              </div>
-              <label class="switch" aria-label="Premium karton qabıq əlavə et">
-                <input type="checkbox" id="cartonCover" />
-                <span class="slider"></span>
-              </label>
-            </div>
             <button class="cta-button" type="button">🎁 İNDİ SİFARİŞ ET</button>
           </article>
         </div>
@@ -1254,21 +1244,11 @@
       if (!priceBox) return;
 
       const priceEl = document.getElementById('totalPrice');
-      const coverInput = document.getElementById('cartonCover');
-      const basePrice = Number(priceBox.dataset.basePrice) || 30;
-      const addonPrice = 10;
+      const basePrice = Number(priceBox.dataset.basePrice) || 50;
+      const addonText = priceBox.dataset.addons || 'Premium karton üzlük, ikiqat cildlənmə';
 
-      function refreshPrice() {
-        const total = basePrice + (coverInput.checked ? addonPrice : 0);
-        priceEl.textContent = total;
-        priceBox.dataset.price = String(total);
-        priceBox.dataset.addons = coverInput.checked
-          ? 'Premium karton qabıq (+10 AZN)'
-          : 'Standart qabıq';
-      }
-
-      refreshPrice();
-      coverInput.addEventListener('change', refreshPrice);
+      priceEl.textContent = basePrice;
+      priceBox.dataset.price = String(basePrice);
 
       const btn = priceBox.querySelector('.cta-button');
       const formatMessage = (name,total,addon) =>
@@ -1283,7 +1263,7 @@
         e.preventDefault();
         const name = priceBox.dataset.package || 'Xüsusi Fərdi Kitab';
         const total = priceBox.dataset.price || String(basePrice);
-        const addon = priceBox.dataset.addons || 'Standart qabıq';
+        const addon = priceBox.dataset.addons || addonText;
         (function burst(){
           const colors = ['#FFD700','#FFC900','#FF9B00'];
           for (let i = 0; i < 26; i++) {
