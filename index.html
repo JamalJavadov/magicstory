@@ -604,11 +604,11 @@
       100%{top:140%}
     }
 
-    .price-section {
+    .inquiry-section {
       text-align: center;
     }
 
-    .price-grid {
+    .inquiry-grid {
       width: 100%;
       max-width: 720px;
       margin-inline: auto;
@@ -616,7 +616,7 @@
       grid-template-columns: minmax(0,1fr);
     }
 
-    .price-box {
+    .inquiry-box {
       background: var(--card-bg);
       border-radius: var(--radius-xl);
       padding: clamp(22px,4.5vw,30px) clamp(20px,4.8vw,32px);
@@ -644,7 +644,7 @@
       z-index: 2;
     }
 
-    .price-title {
+    .inquiry-title {
       font-size: clamp(1.3rem,2.6vw,1.7rem);
       font-weight: 900;
       margin-top: 10px;
@@ -652,27 +652,21 @@
       color: var(--text-dark);
     }
 
-    .price-subtitle {
+    .inquiry-subtitle {
       font-size: clamp(.95rem,2.2vw,1.05rem);
       color: var(--text-soft);
       font-weight: 600;
       margin-bottom: 12px;
     }
 
-    .price-value {
-      font-size: clamp(2.3rem,4vw,3rem);
+    .inquiry-highlight {
+      font-size: clamp(1.45rem,3vw,2.1rem);
       font-weight: 900;
       background: linear-gradient(135deg,#FF9B00,#FFC900);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
       margin: 8px 0 16px;
-    }
-
-    .price-currency {
-      font-size: .5em;
-      -webkit-text-fill-color: initial;
-      color: var(--text-dark);
     }
 
     .features-list {
@@ -903,9 +897,15 @@
         height: 70px;
       }
 
-      .price-box {
+      .inquiry-box {
         border-radius: 26px;
         padding-inline: 18px;
+      }
+
+      .badge {
+        position: static;
+        width: fit-content;
+        margin: 0 auto 12px;
       }
 
       .puzzle-counter {
@@ -1127,16 +1127,15 @@
         </article>
       </section>
 
-      <section class="price-section step-section locked" data-step="5" id="pricing" aria-label="Qiymət və paket">
+      <section class="inquiry-section step-section locked" data-step="5" id="order" aria-label="Sifariş və fərdi paket">
         <div class="puzzle-lock">🔒</div>
-        <div class="price-grid">
-          <article class="price-box" data-package="Xüsusi Fərdi Kitab" data-base-price="50" data-price="50" data-addons="Premium karton üzlük, ikiqat cildlənmə">
+        <div class="inquiry-grid">
+          <article class="inquiry-box" data-package="Xüsusi Fərdi Kitab" data-addons="Premium karton üzlük, ikiqat cildlənmə">
             <div class="badge">🔥 Ən çox seçilən paket</div>
-            <h2 class="price-title">📖 Xüsusi Fərdi Hekayə Kitabı</h2>
-            <p class="price-subtitle">Premium karton üzlük və ikiqat cildlənmə ilə uzun illər istifadə üçün hazırlanır.</p>
-            <div class="price-value">
-              <span id="totalPrice">50</span>
-              <span class="price-currency">AZN</span>
+            <h2 class="inquiry-title">📖 Xüsusi Fərdi Hekayə Kitabı</h2>
+            <p class="inquiry-subtitle">Premium karton üzlük və ikiqat cildlənmə ilə uzun illər istifadə üçün hazırlanır.</p>
+            <div class="inquiry-highlight">
+              Sizin üçün fərdi hazırlanır
             </div>
             <ul class="features-list">
               <li>100% fərdi və xüsusi yazılmış hekayə</li>
@@ -1148,7 +1147,7 @@
             <button class="cta-button" type="button">🎁 İNDİ SİFARİŞ ET</button>
           </article>
         </div>
-        <p class="note">✨ Qiymətlər AZN ilə göstərilir. Sifarişdən sonra sizinlə əlaqə saxlanılacaq.</p>
+        <p class="note">✨ Sifarişdən sonra detallar dəqiqləşdiriləcək və sizinlə əlaqə saxlanılacaq.</p>
       </section>
     </main>
   </div>
@@ -1240,30 +1239,22 @@
     })();
 
     (function() {
-      const priceBox = document.querySelector('.price-box');
-      if (!priceBox) return;
+      const inquiryBox = document.querySelector('.inquiry-box');
+      if (!inquiryBox) return;
 
-      const priceEl = document.getElementById('totalPrice');
-      const basePrice = Number(priceBox.dataset.basePrice) || 50;
-      const addonText = priceBox.dataset.addons || 'Premium karton üzlük, ikiqat cildlənmə';
-
-      priceEl.textContent = basePrice;
-      priceBox.dataset.price = String(basePrice);
-
-      const btn = priceBox.querySelector('.cta-button');
-      const formatMessage = (name,total,addon) =>
+      const addonText = inquiryBox.dataset.addons || 'Premium karton üzlük, ikiqat cildlənmə';
+      const btn = inquiryBox.querySelector('.cta-button');
+      const formatMessage = (name,addon) =>
         `🎉 YENİ SİFARİŞ!\n\n` +
         `📦 Paket: ${name}\n` +
-        `💰 Qiymət: ${total} AZN\n` +
         `✨ Əlavə: ${addon}\n\n` +
         `🌐 Sayt: magicstory.az\n\n` +
         `💝 Uşağınız üçün XÜSUSİ və FƏRDİ hekayə kitabı!`;
 
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const name = priceBox.dataset.package || 'Xüsusi Fərdi Kitab';
-        const total = priceBox.dataset.price || String(basePrice);
-        const addon = priceBox.dataset.addons || addonText;
+        const name = inquiryBox.dataset.package || 'Xüsusi Fərdi Kitab';
+        const addon = inquiryBox.dataset.addons || addonText;
         (function burst(){
           const colors = ['#FFD700','#FFC900','#FF9B00'];
           for (let i = 0; i < 26; i++) {
@@ -1278,7 +1269,7 @@
             }, i*30);
           }
         })();
-        alert(formatMessage(name,total,addon));
+        alert(formatMessage(name,addon));
       });
     })();
 
